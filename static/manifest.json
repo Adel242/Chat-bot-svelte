@@ -1,0 +1,11 @@
+{
+	"manifest_version": 3,
+	"name": "CodeGPT Extension",
+	"version": "0.1.0",
+	"description": "CodeGPT extension",
+	"action": {
+		"default_title": "CodeGPT Extension",
+		"default_popup": "index.html"
+	},
+	"permissions": ["storage"]
+}
