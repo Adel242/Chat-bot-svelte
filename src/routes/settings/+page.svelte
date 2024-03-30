@@ -8,8 +8,8 @@
 	onMount(async () => {
 		const storage = await getChromeStorage(['apiKey', 'orgId'])
 		if (storage) {
-			let apiKey = storage['apiKey'] === 'null' ? '' : storage['apiKey']
-			let orgId = storage['orgId'] === 'null' ? '' : storage['orgId']
+			let apiKey = storage['apiKey'] ?? ''
+			let orgId = storage['orgId'] ?? ''
 			credentials.set({ apiKey, orgId })
 		}
 	})

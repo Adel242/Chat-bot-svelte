@@ -21,12 +21,9 @@
 			messages = []
 			return
 		}
-		const storedMessages =
-			storage[`${$selectedAgent}-messages`] === 'null'
-				? '[]'
-				: storage[`${$selectedAgent}-messages`]
+		const storedMessages = storage[`${$selectedAgent}-messages`] ?? []
 
-		messages = JSON.parse(storedMessages ?? '[]')
+		messages = storedMessages
 	})
 
 	const renderer = new marked.Renderer()
@@ -105,7 +102,7 @@
 			messages[messages.length - 1].content += chunk
 		}
 
-		await setChromeStorage({ [`${$selectedAgent}-messages`]: JSON.stringify(messages) })
+		await setChromeStorage({ [`${$selectedAgent}-messages`]: messages })
 	}
 </script>
 

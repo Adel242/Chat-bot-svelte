@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { BASE_API_URL } from '$lib/api'
-	import { onMount } from 'svelte'
 	import { credentials } from '../stores/credentials-store'
 	import { toast } from 'svelte-sonner'
 	import type { Agent } from '../types'
@@ -10,12 +9,11 @@
 
 	let agents: Agent[] = []
 
-	onMount(async () => {
-		const storage = await getChromeStorage(['apiKey', 'orgId'])
-		if (!storage) return
-		const apiKey = $credentials.apiKey || storage['apiKey']
-		const orgId = $credentials.orgId || storage['orgId']
-		if (!apiKey) return
+	credentials.subscribe(async ({ apiKey, orgId }) => {
+		if (!apiKey) {
+			toast.warning('Please enter an api key')
+			return
+		}
 
 		const headers: HeadersInit = {
 			Authorization: `Bearer ${apiKey}`
@@ -38,7 +36,7 @@
 	const handleChange = async () => {
 		const storage = await getChromeStorage([`${$selectedAgent}-messages`])
 		if (!storage) return
-		const storageMessages = storage['messages'] === 'null' ? [] : storage['messages']
+		const storageMessages = storage['messages'] ?? []
 
 		messages.set(storageMessages)
 	}
