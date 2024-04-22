@@ -9,10 +9,14 @@
 	import { getChromeStorage, removeChromeStorage, setChromeStorage } from '$lib/chrome-storage'
 	import { selectedAgent } from '../stores/agent-store'
 	import { toast } from 'svelte-sonner'
+	import Markdown from './markdown/markdown.svelte'
+	import markedRenderer from '../lib/renderer'
 
 	let chatMessages: HTMLDivElement
 	let messages: Message[] = []
 	let loading = false
+	let renderingMessage = false
+	let inputValue = ''
 
 	selectedAgent.subscribe(async () => {
 		if (!$selectedAgent) return
@@ -26,12 +30,25 @@
 		messages = storedMessages
 	})
 
-	const renderer = new marked.Renderer()
+	// const renderer = new marked.Renderer()
 
-	renderer.link = function (href, title, text) {
-		const titleProp = title ? ` title="${title}"` : ''
-		return `<a target="_blank" class="underline" href="${href}"${titleProp}>${text}</a>`
-	}
+	// Personalizar el renderizado de bloques de código
+	// renderer.code = (code, language) => {
+	//   return `<div class="code-block">
+	//             <div class="code-header">${language || ''}</div>
+	//             <pre><code>${code}</code></pre>
+	//           </div>`
+	// }
+
+	//  // Personalizar el renderizado de líneas de código
+	//  renderer.codespan = (code) => {
+	//   return `<code class="inline-code">${code}</code>`
+	// }
+
+	// markedRenderer.link = function (href, title, text) {
+	// 	const titleProp = title ? ` title="${title}"` : ''
+	// 	return `<a target="_blank" class="underline" href="${href}"${titleProp}>${text}</a>`
+	// }
 
 	const cleanMessages = async () => {
 		const confirmation = confirm('Are you sure you want to delete all chat messages?')
@@ -41,13 +58,13 @@
 	}
 
 	const handleSubmit = async (e: SubmitEvent & { currentTarget: HTMLFormElement }) => {
-		const formData = new FormData(e.currentTarget)
-		const input = formData.get('input') as string
-
+		const input = inputValue.trim()
 		if (!input) return
-
 		if (!$selectedAgent) {
 			toast.warning('Please select an agent')
+			return
+		}
+		if (input.length < 3 || loading || renderingMessage) {
 			return
 		}
 
@@ -63,6 +80,7 @@
 		]
 
 		loading = true
+		renderingMessage = true
 		chatMessages.scrollTop = chatMessages.scrollHeight
 
 		const headers: HeadersInit = {
@@ -90,6 +108,7 @@
 				{ role: 'assistant', content: 'Failed to send message', createdAt: Date.now() }
 			]
 			loading = false
+			renderingMessage = false
 			return
 		}
 
@@ -102,6 +121,7 @@
 			messages[messages.length - 1].content += chunk
 		}
 
+		renderingMessage = false
 		await setChromeStorage({ [`${$selectedAgent}-messages`]: messages })
 	}
 </script>
@@ -122,7 +142,8 @@
         {role === 'user' ? 'bg-slate-900 text-white' : 'bg-gray-200 text-black'}
         "
 			>
-				{@html marked.parse(content, { renderer })}
+				<!-- {@html marked.parse(content, { renderer })} -->
+				<Markdown {content} />
 			</div>
 		</div>
 	{/each}
@@ -140,7 +161,13 @@
 			name="input"
 			class="flex-1 border border-gray-300 rounded-md px-4 py-2 outline-none w-3/4"
 			placeholder="Type your message..."
+			bind:value={inputValue}
 		/>
-		<button class="bg-slate-900 text-white rounded-md px-4 py-2 cursor-pointer">Send</button>
+		<button
+			class="bg-slate-900 text-white rounded-md px-4 py-2 cursor-pointer"
+			disabled={loading || inputValue.trim().length < 3 || renderingMessage}
+		>
+			Send
+		</button>
 	</form>
 </div>

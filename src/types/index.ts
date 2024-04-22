@@ -26,4 +26,9 @@ export interface Message {
 	createdAt: number
 }
 
+// export interface Renderer {
+// 	content?: string | undefined;
+// 	renderer: Renderer;
+// }
+
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[]
