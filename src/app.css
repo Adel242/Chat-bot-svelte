@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html, body {
+	max-width: 100%;
+  }
+
 .loader {
 	width: 20px;
 	background: radial-gradient(circle closest-side, #000 90%, #0000) 0 / calc(100% / 3) 100% space;
@@ -16,6 +20,7 @@
 }
 
 /* code blocks ↓ */
+
 .markdown .code-block {
 	background-color: rgba(10, 10, 12, 0.4);
 	border-radius: 0.5rem;

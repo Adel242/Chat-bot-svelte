@@ -5,8 +5,9 @@
 	<button
 		on:click
 		id="chat-delete"
-		class="flex items-center gap-1 border border-red-400 hover:bg-red-400 hover:text-white transition-colors text-red-600 rounded-md px-2 py-1 cursor-pointer"
-	>
+		class="flex items-center gap-1 border border-zinc-50 hover:bg-zinc-50 hover:text-black transition-colors text-zinc-50 rounded-md px-2 py-1 cursor-pointer "
+		style="font-size: 0.5rem;"
+		>
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			fill="none"

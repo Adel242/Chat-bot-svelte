@@ -1,5 +1,5 @@
-<script lang="ts">
-	import { marked } from 'marked'
+<script lang="ts" src="https://cdn.tailwindcss.com ">
+	// import { marked } from 'marked'
 	import CleanChat from './clean-chat.svelte'
 	import { streamReader } from '../lib/stream-reader'
 	import type { Message } from '../types'
@@ -10,7 +10,9 @@
 	import { selectedAgent } from '../stores/agent-store'
 	import { toast } from 'svelte-sonner'
 	import Markdown from './markdown/markdown.svelte'
-	import markedRenderer from '../lib/renderer'
+	import Agents from './agents.svelte'
+
+	// import markedRenderer from '../lib/renderer'
 
 	let chatMessages: HTMLDivElement
 	let messages: Message[] = []
@@ -30,26 +32,6 @@
 		messages = storedMessages
 	})
 
-	// const renderer = new marked.Renderer()
-
-	// Personalizar el renderizado de bloques de código
-	// renderer.code = (code, language) => {
-	//   return `<div class="code-block">
-	//             <div class="code-header">${language || ''}</div>
-	//             <pre><code>${code}</code></pre>
-	//           </div>`
-	// }
-
-	//  // Personalizar el renderizado de líneas de código
-	//  renderer.codespan = (code) => {
-	//   return `<code class="inline-code">${code}</code>`
-	// }
-
-	// markedRenderer.link = function (href, title, text) {
-	// 	const titleProp = title ? ` title="${title}"` : ''
-	// 	return `<a target="_blank" class="underline" href="${href}"${titleProp}>${text}</a>`
-	// }
-
 	const cleanMessages = async () => {
 		const confirmation = confirm('Are you sure you want to delete all chat messages?')
 		if (!confirmation) return
@@ -58,6 +40,7 @@
 	}
 
 	const handleSubmit = async (e: SubmitEvent & { currentTarget: HTMLFormElement }) => {
+		e.preventDefault()
 		const input = inputValue.trim()
 		if (!input) return
 		if (!$selectedAgent) {
@@ -124,50 +107,50 @@
 		renderingMessage = false
 		await setChromeStorage({ [`${$selectedAgent}-messages`]: messages })
 	}
+
 </script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/rippleui@1.12.1/dist/css/styles.css" />
 
 <div
 	id="chat-messages"
 	bind:this={chatMessages}
-	class="chat-messages flex-1 p-4 overflow-y-auto max-h-[21rem]"
+	class="chat-messages p-4 overflow-y-auto max-h-[21rem] text-sm"
 >
 	{#each messages as { content, role }}
-		<div class="flex mb-3 {role === 'user' ? 'justify-end' : 'justify-start'}">
-			<div
-				class="
-        a
-        rounded-lg py-2 px-4 max-w-[70%]
-        grid
-        gap-2
-        {role === 'user' ? 'bg-slate-900 text-white' : 'bg-gray-200 text-black'}
-        "
-			>
-				<!-- {@html marked.parse(content, { renderer })} -->
+		<div class=" mb-3 {role === 'user' ? 'justify-end' : 'justify-start'}">
+			<div class="a rounded-lg py-0 px-0 max-w-[100] grid gap-2">
 				<Markdown {content} />
+				<!-- {@html marked.parse(content, { renderer })} -->
 			</div>
 		</div>
 	{/each}
 	{#if loading}
-		<Loader />
+		<Loader /> 
 	{/if}
 </div>
 {#if messages.length}
 	<CleanChat on:click={cleanMessages} />
 {/if}
-<div class="border-gray-200 pt-4 border-t">
-	<form on:submit|preventDefault={handleSubmit} class="flex space-x-4 items-center">
-		<input
-			type="text"
-			name="input"
-			class="flex-1 border border-gray-300 rounded-md px-4 py-2 outline-none w-3/4"
-			placeholder="Type your message..."
-			bind:value={inputValue}
-		/>
-		<button
-			class="bg-slate-900 text-white rounded-md px-4 py-2 cursor-pointer"
-			disabled={loading || inputValue.trim().length < 3 || renderingMessage}
-		>
-			Send
-		</button>
+
+<div class="border-zinc-700 border rounded-md bg-zinc-900 p-1 flex items-center">
+	<form on:submit|preventDefault={handleSubmit} class="flex w-full">
+		<div class="flex-grow">
+			<textarea
+				name="input"
+				class="w-full bg-zinc-900 resize-none p-1 outline-none rounded-md text-xs"
+				placeholder="Type your message..."
+				bind:value={inputValue}
+				style="font-size: 0.875rem; height: 2.5rem;" 
+			></textarea>
+		</div>
+		<div class="ml-2">
+			<button
+				type="submit"
+				class="bg-white text-black py-1 px-2 rounded-md text-xs"
+				disabled={loading || inputValue.trim().length < 1 || renderingMessage}
+				style="cursor: pointer;"
+			>Send</button>
+		</div>
 	</form>
 </div>
