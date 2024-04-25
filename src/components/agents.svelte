@@ -6,8 +6,9 @@
 	import { selectedAgent } from '../stores/agent-store'
 	import { getChromeStorage } from '$lib/chrome-storage'
 	import { messages } from '../stores/messages-store'
+	import { avatarAgents } from '../stores/avatarAgents'
 
-	let agents: Agent[] = []
+	// let agents: Agent[] = []
 
 	credentials.subscribe(async ({ apiKey, orgId }) => {
 		if (!apiKey) {
@@ -30,7 +31,9 @@
 			return
 		}
 
-		agents = await res.json()
+		const agentsData = await res.json()
+
+		avatarAgents.set(agentsData)
 	})
 
 	const handleChange = async () => {
@@ -44,7 +47,7 @@
 
 <select class="select max-w-full" bind:value={$selectedAgent} on:change={handleChange}>
 	<option value="" disabled selected>Select an agent</option>
-	{#each agents as { id, name } (id)}
+	{#each $avatarAgents as { id, name } (id)}
 		<option value={id}>{name}</option>
 	{/each}
 </select>

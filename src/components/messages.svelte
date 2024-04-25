@@ -1,5 +1,4 @@
 <script lang="ts" src="https://cdn.tailwindcss.com ">
-	// import { marked } from 'marked'
 	import CleanChat from './clean-chat.svelte'
 	import { streamReader } from '../lib/stream-reader'
 	import type { Message } from '../types'
@@ -10,8 +9,9 @@
 	import { selectedAgent } from '../stores/agent-store'
 	import { toast } from 'svelte-sonner'
 	import Markdown from './markdown/markdown.svelte'
-	import Agents from './agents.svelte'
-
+	import { avatarAgents } from '../stores/avatarAgents'
+	import { users } from '../stores/users-store'
+	// import Agents from './agents.svelte'
 	// import markedRenderer from '../lib/renderer'
 
 	let chatMessages: HTMLDivElement
@@ -19,6 +19,8 @@
 	let loading = false
 	let renderingMessage = false
 	let inputValue = ''
+	$: currentAgent = $avatarAgents.find((agent) => agent.id === $selectedAgent)
+	$: currentUser = $users.find((user) => user.id === $credentials.orgId)
 
 	selectedAgent.subscribe(async () => {
 		if (!$selectedAgent) return
@@ -107,7 +109,8 @@
 		renderingMessage = false
 		await setChromeStorage({ [`${$selectedAgent}-messages`]: messages })
 	}
-
+	console.log('users',users)
+	console.log('agents',currentAgent)
 </script>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/rippleui@1.12.1/dist/css/styles.css" />
@@ -115,18 +118,28 @@
 <div
 	id="chat-messages"
 	bind:this={chatMessages}
-	class="chat-messages p-4 overflow-y-auto max-h-[21rem] text-sm"
+	class="chat-messages p-2 overflow-y-auto max-h-[21rem] text-sm"
 >
 	{#each messages as { content, role }}
 		<div class=" mb-3 {role === 'user' ? 'justify-end' : 'justify-start'}">
-			<div class="a rounded-lg py-0 px-0 max-w-[100] grid gap-2">
-				<Markdown {content} />
+			<div class=" a rounded-lg py-0 px-0 max-w-[100] grid gap-1">
 				<!-- {@html marked.parse(content, { renderer })} -->
+				{#if role === 'assistant' && selectedAgent}
+					<div class="flex items-center">
+						<img src={currentAgent?.image} alt="Agent" class="w-5 h-5 mr-2 rounded-full" />
+						<div>{currentAgent?.name}</div>
+					</div>
+				{/if}
+				{#if role === 'user'} 
+				<div>{currentUser?.name}</div>
+				<div>{currentUser?.image}</div>
+				{/if}
+				<Markdown {content} />
 			</div>
 		</div>
 	{/each}
 	{#if loading}
-		<Loader /> 
+		<Loader />
 	{/if}
 </div>
 {#if messages.length}
@@ -141,7 +154,7 @@
 				class="w-full bg-zinc-900 resize-none p-1 outline-none rounded-md text-xs"
 				placeholder="Type your message..."
 				bind:value={inputValue}
-				style="font-size: 0.875rem; height: 2.5rem;" 
+				style="font-size: 0.875rem; height: 2.5rem;"
 			></textarea>
 		</div>
 		<div class="ml-2">
@@ -149,8 +162,8 @@
 				type="submit"
 				class="bg-white text-black py-1 px-2 rounded-md text-xs"
 				disabled={loading || inputValue.trim().length < 1 || renderingMessage}
-				style="cursor: pointer;"
-			>Send</button>
+				style="cursor: pointer;">Send</button
+			>
 		</div>
 	</form>
 </div>

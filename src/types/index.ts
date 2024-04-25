@@ -26,6 +26,12 @@ export interface Message {
 	createdAt: number
 }
 
+export interface Users {
+	id: string
+	name: string
+	image: string | null
+}
+
 // export interface Renderer {
 // 	content?: string | undefined;
 // 	renderer: Renderer;
