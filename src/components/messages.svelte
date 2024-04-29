@@ -10,7 +10,8 @@
 	import { toast } from 'svelte-sonner'
 	import Markdown from './markdown/markdown.svelte'
 	import { avatarAgents } from '../stores/avatarAgents'
-	import { users } from '../stores/users-store'
+	// import { users } from '../stores/users-store'
+	// import { onMount } from 'svelte';
 	// import Agents from './agents.svelte'
 	// import markedRenderer from '../lib/renderer'
 
@@ -20,7 +21,7 @@
 	let renderingMessage = false
 	let inputValue = ''
 	$: currentAgent = $avatarAgents.find((agent) => agent.id === $selectedAgent)
-	$: currentUser = $users.find((user) => user.id === $credentials.orgId)
+	// $: currentUser = $users.find((user) => user.id === $credentials.apiKey);
 
 	selectedAgent.subscribe(async () => {
 		if (!$selectedAgent) return
@@ -35,8 +36,8 @@
 	})
 
 	const cleanMessages = async () => {
-		const confirmation = confirm('Are you sure you want to delete all chat messages?')
-		if (!confirmation) return
+		// const confirmation = confirm('Are you sure you want to delete all chat messages?')
+		// if (!confirmation) return
 		messages = []
 		await removeChromeStorage(`${$selectedAgent}-messages`)
 	}
@@ -109,8 +110,8 @@
 		renderingMessage = false
 		await setChromeStorage({ [`${$selectedAgent}-messages`]: messages })
 	}
-	console.log('users',users)
-	console.log('agents',currentAgent)
+	// console.log('users', users)
+	// console.log('agents', currentAgent)
 </script>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/rippleui@1.12.1/dist/css/styles.css" />
@@ -130,10 +131,10 @@
 						<div>{currentAgent?.name}</div>
 					</div>
 				{/if}
-				{#if role === 'user'} 
-				<div>{currentUser?.name}</div>
-				<div>{currentUser?.image}</div>
-				{/if}
+				<!-- {#if role === 'user'}
+					<img src={currentUser?.image} alt={currentUser?.name} class="w-5 h-5 mr-2 rounded-full" />
+					<div>{currentUser?.name}</div>
+				{/if} -->
 				<Markdown {content} />
 			</div>
 		</div>
@@ -146,12 +147,12 @@
 	<CleanChat on:click={cleanMessages} />
 {/if}
 
-<div class="border-zinc-700 border rounded-md bg-zinc-900 p-1 flex items-center">
+<div class="border-zinc-100 border rounded-md bg-zinc-800 p-1 flex items-center">
 	<form on:submit|preventDefault={handleSubmit} class="flex w-full">
 		<div class="flex-grow">
 			<textarea
 				name="input"
-				class="w-full bg-zinc-900 resize-none p-1 outline-none rounded-md text-xs"
+				class="w-full bg-zinc-800 resize-none p-1 outline-none rounded-md text-xs"
 				placeholder="Type your message..."
 				bind:value={inputValue}
 				style="font-size: 0.875rem; height: 2.5rem;"

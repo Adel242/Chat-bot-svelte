@@ -18,6 +18,7 @@
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"@types/chrome": "0.0.263",
 		"@types/eslint": "^8.56.0",
+		"@types/prismjs": "^1.26.3",
 		"@typescript-eslint/eslint-plugin": "^7.0.0",
 		"@typescript-eslint/parser": "^7.0.0",
 		"autoprefixer": "10.4.19",

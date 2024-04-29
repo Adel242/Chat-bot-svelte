@@ -31,6 +31,9 @@ devDependencies:
   '@types/eslint':
     specifier: ^8.56.0
     version: 8.56.6
+  '@types/prismjs':
+    specifier: ^1.26.3
+    version: 1.26.3
   '@typescript-eslint/eslint-plugin':
     specifier: ^7.0.0
     version: 7.4.0(@typescript-eslint/parser@7.4.0)(eslint@8.57.0)(typescript@5.4.3)
@@ -669,6 +672,10 @@ packages:
     resolution: {integrity: sha512-j5+GMZVIPCJpRTwI/mO64mCzv7X+zAEq3JP0EV2lo/BrLWHAohEubUJimIAY23rH27+wKce0fXUYjAdBoqlaYw==}
     dependencies:
       postcss: 8.4.38
+    dev: true
+
+  /@types/prismjs@1.26.3:
+    resolution: {integrity: sha512-A0D0aTXvjlqJ5ZILMz3rNfDBOx9hHxLZYv2by47Sm/pqW35zzjusrZTryatjN/Rf8Us2gZrJD+KeHbUSTux1Cw==}
     dev: true
 
   /@types/pug@2.0.10:
