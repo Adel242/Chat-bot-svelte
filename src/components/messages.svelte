@@ -1,19 +1,16 @@
 <script lang="ts" src="https://cdn.tailwindcss.com ">
-	import CleanChat from './clean-chat.svelte'
-	import { streamReader } from '../lib/stream-reader'
-	import type { Message } from '../types'
-	import Loader from './loader.svelte'
-	import { BASE_API_URL } from '$lib/api'
-	import { credentials } from '../stores/credentials-store'
-	import { getChromeStorage, removeChromeStorage, setChromeStorage } from '$lib/chrome-storage'
-	import { selectedAgent } from '../stores/agent-store'
-	import { toast } from 'svelte-sonner'
-	import Markdown from './markdown/markdown.svelte'
-	import { avatarAgents } from '../stores/avatarAgents'
-	// import { users } from '../stores/users-store'
-	// import { onMount } from 'svelte';
-	// import Agents from './agents.svelte'
-	// import markedRenderer from '../lib/renderer'
+	import CleanChat from './clean-chat.svelte';
+	import { streamReader } from '../lib/stream-reader';
+	import type { Message } from '../types';
+	import Loader from './loader.svelte';
+	import { BASE_API_URL } from '$lib/api';
+	import { credentials } from '../stores/credentials-store';
+	import { getChromeStorage, removeChromeStorage, setChromeStorage } from '$lib/chrome-storage';
+	import { selectedAgent } from '../stores/agent-store';
+	import { toast } from 'svelte-sonner';
+	import Markdown from './markdown.svelte';
+	import { avatarAgents } from '../stores/avatarAgents';
+	import { user } from '../stores/users-store';
 
 	let chatMessages: HTMLDivElement
 	let messages: Message[] = []
@@ -21,7 +18,6 @@
 	let renderingMessage = false
 	let inputValue = ''
 	$: currentAgent = $avatarAgents.find((agent) => agent.id === $selectedAgent)
-	// $: currentUser = $users.find((user) => user.id === $credentials.apiKey);
 
 	selectedAgent.subscribe(async () => {
 		if (!$selectedAgent) return
@@ -49,10 +45,10 @@
 		if (!$selectedAgent) {
 			toast.warning('Please select an agent')
 			return
-		}
+		};
 		if (input.length < 3 || loading || renderingMessage) {
 			return
-		}
+		};
 
 		e.currentTarget.reset()
 
@@ -63,7 +59,7 @@
 				content: input,
 				createdAt: Date.now()
 			}
-		]
+		];
 
 		loading = true
 		renderingMessage = true
@@ -72,7 +68,7 @@
 		const headers: HeadersInit = {
 			Authorization: `Bearer ${$credentials.apiKey}`,
 			'Content-Type': 'application/json'
-		}
+		};
 
 		if ($credentials.orgId) headers['CodeGPT-Org-Id'] = $credentials.orgId
 
@@ -85,7 +81,7 @@
 				messages,
 				agentId: $selectedAgent
 			})
-		})
+		});
 
 		if (!res.ok) {
 			console.error('Failed to send message')
@@ -96,7 +92,7 @@
 			loading = false
 			renderingMessage = false
 			return
-		}
+		};
 
 		for await (const chunk of streamReader(res)) {
 			if (messages[messages.length - 1].role !== 'assistant') {
@@ -105,13 +101,12 @@
 				chatMessages.scrollTop = chatMessages.scrollHeight
 			}
 			messages[messages.length - 1].content += chunk
-		}
+		};
 
 		renderingMessage = false
 		await setChromeStorage({ [`${$selectedAgent}-messages`]: messages })
-	}
-	// console.log('users', users)
-	// console.log('agents', currentAgent)
+	};
+
 </script>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/rippleui@1.12.1/dist/css/styles.css" />
@@ -119,7 +114,7 @@
 <div
 	id="chat-messages"
 	bind:this={chatMessages}
-	class="chat-messages p-2 overflow-y-auto max-h-[21rem] text-sm"
+	class="chat-messages p-2 overflow-y-auto max-h-[24rem] text-sm"
 >
 	{#each messages as { content, role }}
 		<div class=" mb-3 {role === 'user' ? 'justify-end' : 'justify-start'}">
@@ -131,10 +126,13 @@
 						<div>{currentAgent?.name}</div>
 					</div>
 				{/if}
-				<!-- {#if role === 'user'}
-					<img src={currentUser?.image} alt={currentUser?.name} class="w-5 h-5 mr-2 rounded-full" />
-					<div>{currentUser?.name}</div>
-				{/if} -->
+				{#if role === 'user'}
+				<div class="flex items-center">
+					<img src={$user?.avatar_url} alt={$user?.full_name} class="w-5 h-5 mr-2 rounded-full" />
+					<div>{$user?.full_name}</div>
+				</div>
+					
+				{/if}
 				<Markdown {content} />
 			</div>
 		</div>

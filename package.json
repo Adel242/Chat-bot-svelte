@@ -40,8 +40,9 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"highlight.js": "^11.9.0",
 		"marked": "12.0.1",
-		"svelte-markdown": "^0.4.1",
+		"marked-highlight": "^2.1.1",
 		"svelte-sonner": "0.3.19"
 	}
 }

@@ -8,7 +8,7 @@
 		},
 		{
 			url: '/settings',
-			label: 'Settings'
+			label: 'Log in'
 		}
 	] as const
 </script>
@@ -23,10 +23,8 @@
 	<div class="navbar-end">
 		{#each links as { url, label } (url)}
 			<a
-				class="
-        navbar-item py-0 px-2
-        {$page.route.id === url && 'link link-primary'}
-      "
+				class="navbar-item py-0 px-2
+        		{$page.route.id === url && 'link link-primary'}"
 				href={url}
 			>
 				{label}
@@ -34,3 +32,13 @@
 		{/each}
 	</div>
 </div>
+
+<style>
+	.navbar {
+		padding: 0;
+	}
+
+	.navbar-end {
+		padding: 0;
+	}
+</style>

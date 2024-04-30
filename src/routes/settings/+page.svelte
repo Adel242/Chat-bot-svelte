@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { goto } from '$app/navigation'
-	import { onMount } from 'svelte'
-	import { credentials } from '../../stores/credentials-store'
-	import { toast } from 'svelte-sonner'
-	import { getChromeStorage, setChromeStorage } from '$lib/chrome-storage'
+	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
+	import { credentials } from '../../stores/credentials-store';
+	import { toast } from 'svelte-sonner';
+	import { getChromeStorage, setChromeStorage } from '$lib/chrome-storage';
 
 	onMount(async () => {
 		const storage = await getChromeStorage(['apiKey', 'orgId'])

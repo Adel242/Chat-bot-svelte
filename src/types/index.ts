@@ -26,10 +26,11 @@ export interface Message {
 	createdAt: number
 }
 
-export interface Users {
-	id: string
-	name: string
-	image: string | null
+export interface User {
+	username: string | null
+	full_name: string | null
+	avatar_url: string | null
+	organization: string[]
 }
 
 // export interface Renderer {
