@@ -113,11 +113,11 @@
 <div
 	id="chat-messages"
 	bind:this={chatMessages}
-	class="chat-messages p-2 overflow-y-auto max-h-[24rem] text-sm "
+	class="chat-messages p-2 overflow-y-auto max-h-[26rem] text-sm"
 >
 	{#each messages as { content, role }}
 		<div class=" mb-3 {role === 'user' ? 'justify-end' : 'justify-start'}">
-			<div class="rounded-lg py-0 px-0 max-w-[100] ">
+			<div class="rounded-lg py-0 px-0 max-w-[100]">
 				<!-- {@html marked.parse(content, { renderer })} -->
 				{#if role === 'assistant' && selectedAgent}
 					<div class="flex items-center">
@@ -142,8 +142,9 @@
 <!-- {#if messages.length}
 	<CleanChat on:click={cleanMessages} />
 {/if} -->
- 
-<div class="border-zinc-100 border rounded-md bg-zinc-800 p-1 h-18 mt-auto"> <!---resolver optimizacion de mt-auto-->
+
+<div class="border-zinc-100 border rounded-md bg-zinc-800 p-1 h-18 mt-auto">
+	<!---resolver optimizacion de mt-auto-->
 	<form on:submit|preventDefault={handleSubmit} class=" w-full">
 		<textarea
 			name="input"
@@ -153,7 +154,7 @@
 			style="font-size: 0.875rem; height: 2.5rem;"
 		></textarea>
 		<div class=" flex flex-grow justify-between items-end">
-			<div class="flex items-ends ">
+			<div class="flex items-ends">
 				{#if messages.length}
 					<CleanChat on:click={cleanMessages} />
 				{/if}

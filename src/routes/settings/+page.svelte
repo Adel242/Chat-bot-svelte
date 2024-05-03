@@ -33,8 +33,8 @@
 
 <main class="flex flex-col h-full items-center justify-center bg-zinc-800">
 	<img src="/favicon-16.png" class="w-[25%] m-2" alt="CodeGPT Logo" />
-	<p>GPT CODE THE EXTENSION EXPERIENCE</p>
-	<section class="bg-zinc-800 border-zinc-100 border rounded-md rounded-lg">
+	<p>CODE GPT THE EXTENSION EXPERIENCE</p>
+	<section class="bg-zinc-800  rounded-lg">
 		<div class="p-8 shadow-lg">
 			<form class="space-y-4" on:submit|preventDefault={handleSubmit}>
 				<div class="w-full grid gap-2">
@@ -62,7 +62,7 @@
 				</div>
 
 				<div class="mt-4">
-					<button type="submit" class="rounded-lg btn btn-solid-primary btn-block">Save</button>
+					<button type="submit" class="bg-white text-black py-1 px-2 rounded-md text-xs w-full">Log in</button>
 				</div>
 			</form>
 		</div>
@@ -71,7 +71,15 @@
 
 <style>
 	input{
-		border : 1px solid #d9d9e3
+		border : 1px solid #d9d9e3;
+		border-radius : 0.4rem
+	}
+
+	p {
+		font-family: 'Inter', sans-serif;
+		font-size: 1.5rem;
+		color: #1212d3;
+		text-align: center;
 	}
 
 </style>

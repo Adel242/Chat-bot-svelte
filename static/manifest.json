@@ -13,5 +13,8 @@
 		"48": "favicon-48.png",
 		"128": "favicon-128.png"
 	},
-	"permissions": ["storage"]
+	"permissions": [
+		"storage",
+		"contextMenus"
+	]
 }

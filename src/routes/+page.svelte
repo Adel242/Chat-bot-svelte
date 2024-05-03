@@ -1,5 +1,5 @@
 <script>
-	import Agents from '../components/agents.svelte';
+	// import Agents from '../components/agents.svelte';
 	import Messages from '../components/messages.svelte';
 	// import { credentials } from '../stores/credentials-store';
 </script>
