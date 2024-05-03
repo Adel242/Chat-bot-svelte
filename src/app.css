@@ -21,13 +21,22 @@ html, body {
 
 /* code blocks ↓ */
 
-.markdown .language {
+.language {
+	
 	background-color: rgb(39 39 42);
 	border-radius: 0.5rem;
 	padding: 0.2rem;
 	max-width: auto;
 	border: solid 0.1rem rgb(63 63 70);
-} 
+	display: flex;
+	align-items: center;
+}
+
+/* .language .languaje-icon {
+	padding: 10px;
+  	background-color: aqua;
+  	margin-right: 2px;
+} */
 
  .markdown code {
 	/* background-color: rgb(9, 9, 11, 0.6); */
@@ -36,6 +45,7 @@ html, body {
 	border-radius: 0.5rem 0.5rem 0 0;
 	font-family: 'Courier New', Courier, monospace;
 	font-size: 0.9rem; 
+	display: inline-block; 
 	line-height: 1.4; 
 	border: solid 1 px #3f3f46;
 	margin: 0.5rem 0 0.5rem 0

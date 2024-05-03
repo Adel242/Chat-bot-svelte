@@ -1,16 +1,16 @@
 <script lang="ts" src="https://cdn.tailwindcss.com ">
-	import CleanChat from './clean-chat.svelte';
-	import { streamReader } from '../lib/stream-reader';
-	import type { Message } from '../types';
-	import Loader from './loader.svelte';
-	import { BASE_API_URL } from '$lib/api';
-	import { credentials } from '../stores/credentials-store';
-	import { getChromeStorage, removeChromeStorage, setChromeStorage } from '$lib/chrome-storage';
-	import { selectedAgent } from '../stores/agent-store';
-	import { toast } from 'svelte-sonner';
-	import Markdown from './markdown.svelte';
-	import { avatarAgents } from '../stores/avatarAgents';
-	import { user } from '../stores/users-store';
+	import CleanChat from './clean-chat.svelte'
+	import { streamReader } from '../lib/stream-reader'
+	import type { Message } from '../types'
+	import Loader from './loader.svelte'
+	import { BASE_API_URL } from '$lib/api'
+	import { credentials } from '../stores/credentials-store'
+	import { getChromeStorage, removeChromeStorage, setChromeStorage } from '$lib/chrome-storage'
+	import { selectedAgent } from '../stores/agent-store'
+	import { toast } from 'svelte-sonner'
+	import Markdown from './markdown.svelte'
+	import { avatarAgents } from '../stores/avatarAgents'
+	import { user } from '../stores/users-store'
 
 	let chatMessages: HTMLDivElement
 	let messages: Message[] = []
@@ -45,10 +45,10 @@
 		if (!$selectedAgent) {
 			toast.warning('Please select an agent')
 			return
-		};
+		}
 		if (input.length < 3 || loading || renderingMessage) {
 			return
-		};
+		}
 
 		e.currentTarget.reset()
 
@@ -59,7 +59,7 @@
 				content: input,
 				createdAt: Date.now()
 			}
-		];
+		]
 
 		loading = true
 		renderingMessage = true
@@ -68,7 +68,7 @@
 		const headers: HeadersInit = {
 			Authorization: `Bearer ${$credentials.apiKey}`,
 			'Content-Type': 'application/json'
-		};
+		}
 
 		if ($credentials.orgId) headers['CodeGPT-Org-Id'] = $credentials.orgId
 
@@ -81,7 +81,7 @@
 				messages,
 				agentId: $selectedAgent
 			})
-		});
+		})
 
 		if (!res.ok) {
 			console.error('Failed to send message')
@@ -92,7 +92,7 @@
 			loading = false
 			renderingMessage = false
 			return
-		};
+		}
 
 		for await (const chunk of streamReader(res)) {
 			if (messages[messages.length - 1].role !== 'assistant') {
@@ -101,12 +101,11 @@
 				chatMessages.scrollTop = chatMessages.scrollHeight
 			}
 			messages[messages.length - 1].content += chunk
-		};
+		}
 
 		renderingMessage = false
 		await setChromeStorage({ [`${$selectedAgent}-messages`]: messages })
-	};
-
+	}
 </script>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/rippleui@1.12.1/dist/css/styles.css" />
@@ -114,11 +113,11 @@
 <div
 	id="chat-messages"
 	bind:this={chatMessages}
-	class="chat-messages p-2 overflow-y-auto max-h-[24rem] text-sm"
+	class="chat-messages p-2 overflow-y-auto max-h-[24rem] text-sm "
 >
 	{#each messages as { content, role }}
 		<div class=" mb-3 {role === 'user' ? 'justify-end' : 'justify-start'}">
-			<div class=" a rounded-lg py-0 px-0 max-w-[100] grid gap-1">
+			<div class="rounded-lg py-0 px-0 max-w-[100] ">
 				<!-- {@html marked.parse(content, { renderer })} -->
 				{#if role === 'assistant' && selectedAgent}
 					<div class="flex items-center">
@@ -127,11 +126,10 @@
 					</div>
 				{/if}
 				{#if role === 'user'}
-				<div class="flex items-center">
-					<img src={$user?.avatar_url} alt={$user?.full_name} class="w-5 h-5 mr-2 rounded-full" />
-					<div>{$user?.full_name}</div>
-				</div>
-					
+					<div class="flex items-center">
+						<img src={$user?.avatar_url} alt={$user?.full_name} class="w-5 h-5 mr-2 rounded-full" />
+						<div>{$user?.full_name}</div>
+					</div>
 				{/if}
 				<Markdown {content} />
 			</div>
@@ -141,28 +139,33 @@
 		<Loader />
 	{/if}
 </div>
-{#if messages.length}
+<!-- {#if messages.length}
 	<CleanChat on:click={cleanMessages} />
-{/if}
-
-<div class="border-zinc-100 border rounded-md bg-zinc-800 p-1 flex items-center">
-	<form on:submit|preventDefault={handleSubmit} class="flex w-full">
-		<div class="flex-grow">
-			<textarea
-				name="input"
-				class="w-full bg-zinc-800 resize-none p-1 outline-none rounded-md text-xs"
-				placeholder="Type your message..."
-				bind:value={inputValue}
-				style="font-size: 0.875rem; height: 2.5rem;"
-			></textarea>
-		</div>
-		<div class="ml-2">
-			<button
-				type="submit"
-				class="bg-white text-black py-1 px-2 rounded-md text-xs"
-				disabled={loading || inputValue.trim().length < 1 || renderingMessage}
-				style="cursor: pointer;">Send</button
-			>
+{/if} -->
+ 
+<div class="border-zinc-100 border rounded-md bg-zinc-800 p-1 h-18 mt-auto"> <!---resolver optimizacion de mt-auto-->
+	<form on:submit|preventDefault={handleSubmit} class=" w-full">
+		<textarea
+			name="input"
+			class="w-full bg-zinc-800 resize-none p-1 outline-none rounded-md text-xs"
+			placeholder="Type your message..."
+			bind:value={inputValue}
+			style="font-size: 0.875rem; height: 2.5rem;"
+		></textarea>
+		<div class=" flex flex-grow justify-between items-end">
+			<div class="flex items-ends ">
+				{#if messages.length}
+					<CleanChat on:click={cleanMessages} />
+				{/if}
+			</div>
+			<div class=" ml-1">
+				<button
+					type="submit"
+					class="bg-white text-black py-1 px-2 rounded-md text-xs"
+					disabled={loading || inputValue.trim().length < 1 || renderingMessage}
+					style="cursor: pointer;">Send</button
+				>
+			</div>
 		</div>
 	</form>
 </div>

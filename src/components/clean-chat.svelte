@@ -1,20 +1,20 @@
 <script lang="ts">
 </script>
 
-<div class="flex justify-end p-2">
+<div class="flex py-0 px-0 h-5">
 	<button
 		on:click
 		id="chat-delete"
-		class="flex items-center gap-1 border border-zinc-50 hover:bg-zinc-50 hover:text-black transition-colors text-zinc-50 rounded-md px-2 py-1 cursor-pointer "
+		class="flex items-center gap-1 border border-zinc-100 hover:bg-zinc-100 hover:text-black transition-colors text-zinc-100 rounded-md px-2 py-1 cursor-pointer "
 		style="font-size: 0.5rem;"
 		>
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			fill="none"
-			viewBox="0 0 24 24"
+			viewBox="0 0 30 24"
 			stroke-width="1.5"
 			stroke="currentColor"
-			class="w-4 h-4"
+			class="w-3 h-4"
 		>
 			<path
 				stroke-linecap="round"

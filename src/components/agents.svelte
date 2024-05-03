@@ -42,9 +42,17 @@
 	};
 </script>
 
-<select class="select max-w-full" bind:value={$selectedAgent} on:change={handleChange}>
+<select class="w-full ml-2 text-sm border-gray-500 border rounded-md bg-zinc-950" bind:value={$selectedAgent} on:change={handleChange}>
 	<option value="" disabled selected>Select an agent</option>
 	{#each $avatarAgents as { id, name } (id)}
 		<option value={id}>{name}</option>
 	{/each}
 </select>
+
+<style>
+	select {
+		font-size: 0.8rem;
+		cursor: pointer;
+		outline: none;
+	}
+</style>
