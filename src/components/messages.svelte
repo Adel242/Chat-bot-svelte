@@ -18,6 +18,8 @@
 	let renderingMessage = false
 	let inputValue = ''
 	$: currentAgent = $avatarAgents.find((agent) => agent.id === $selectedAgent)
+	let stopGenerating = false
+	let abortController;
 
 	selectedAgent.subscribe(async () => {
 		if (!$selectedAgent) return
@@ -63,7 +65,9 @@
 
 		loading = true
 		renderingMessage = true
+		stopGenerating = false
 		chatMessages.scrollTop = chatMessages.scrollHeight
+		abortController = new AbortController();
 
 		const headers: HeadersInit = {
 			Authorization: `Bearer ${$credentials.apiKey}`,
@@ -80,8 +84,9 @@
 				format: 'json',
 				messages,
 				agentId: $selectedAgent
-			})
-		})
+			}),
+			signal: abortController.signal
+		});
 
 		if (!res.ok) {
 			console.error('Failed to send message')
@@ -91,10 +96,13 @@
 			]
 			loading = false
 			renderingMessage = false
-			return
+			return;
 		}
 
 		for await (const chunk of streamReader(res)) {
+			if (stopGenerating) {
+				break;
+			}
 			if (messages[messages.length - 1].role !== 'assistant') {
 				messages = [...messages, { role: 'assistant', content: '', createdAt: Date.now() }]
 				loading = false
@@ -105,6 +113,10 @@
 
 		renderingMessage = false
 		await setChromeStorage({ [`${$selectedAgent}-messages`]: messages })
+	}
+
+	const stopGeneration = () => {
+		stopGenerating = true
 	}
 </script>
 
@@ -159,13 +171,25 @@
 					<CleanChat on:click={cleanMessages} />
 				{/if}
 			</div>
-			<div class=" ml-1">
-				<button
-					type="submit"
-					class="bg-white text-black py-1 px-2 rounded-md text-xs"
-					disabled={loading || inputValue.trim().length < 1 || renderingMessage}
-					style="cursor: pointer;">Send</button
-				>
+			<div class="ml-1">
+				{#if renderingMessage && !loading}
+					<button
+						type="button"
+						class="bg-black text-white py-1 px-2 rounded-md text-xs"
+						on:click={stopGeneration}
+					>
+						Stop
+					</button>
+				{:else}
+					<button
+						type="submit"
+						class="bg-white text-black py-1 px-2 rounded-md text-xs"
+						disabled={loading || inputValue.trim().length < 1}
+						style="cursor: pointer;"
+					>
+						Send
+					</button>
+				{/if}
 			</div>
 		</div>
 	</form>
