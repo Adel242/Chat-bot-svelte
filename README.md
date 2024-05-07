@@ -1,38 +1,72 @@
-# create-svelte
+# Description
+Este es un bot de chat construido como una extensión para Google Chrome, diseñado para interactuar con agentes especializados creados por CODE-GPT. Cada agente está entrenado para manejar información específica utilizando el modelo de lenguaje de CODE-GPT.
 
 Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte)
+If you want more information about svelte visit the website [`svelte`](https://svelte.dev/docs/introduction)
 
-## Creating a project
+# Getting Started
+Before you start using this extension, make sure you have a valid CodeGPT or OpenAI API Key. You can obtain them from the following links:
+- **CodeGPT API Key**: [Get CodeGPT API Key](https://codegpt.co)
+- **OpenAI API Key**: [Get OpenAI API Key](https://openai.com/blog/openai-api)
 
-If you're seeing this, you've probably already done this step. Congrats!
+Optionally, you can request an Organization ID through CodeGPT.  
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+# Requirements
+Before starting, make sure you have the following programs installed:
+Node.js (version 18 or higher)
+Google Chrome (latest version)
 
-# create a new project in my-app
-npm create svelte@latest my-app
+# Installation
+ 1. Clone this repository to your local machine:
+```bash 
+git clone https://github.com/JudiniLabs/Code-GPT-Chrome-extension.git
 ```
 
-## Developing
+2. Navigate to the project directory:
+ ```bash 
+cd Code-GPT-Chrome-extension
+```
+3. Install the project dependencies using pnpm or npm:
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-pnpm dev
-
-# or start the server and open the app in a new browser tab
-pnpm dev -- --open
+```bach
+pnpm install or npm install
 ```
 
-## Building
+# Development
+To start the application in development mode, run one of the following commands:
+```bach
+pnpm dev or npm run dev
+```
+The application will be available at http://localhost:5173 for pnpm or http://localhost:3000 for npm .
 
-To create a production version of your app:
+##Getting Started with create-svelte
 
-```bash
-pnpm build
+# Production Build
+To build the application for production, run one of the following commands:
+
+```bach
+pnpm build or npm run build
 ```
 
-You can preview the production build with `npm run preview`.
+# Loading the Extension in Google Chrome
+1.Open Google Chrome and navigate to chrome://extensions/.
+2.Enable "Developer mode" in the top-right corner
+3. Click "Load unpacked" and select the file 'build' directory of the project.
+The extension will be loaded into your Chrome browser.
+
+# Using the Extension
+1. Open a new tab in Google Chrome.
+2. Click the CodeGPT Chat extension icon in the toolbar to open the chat window.
+3. Enter your ChatGPT or OpenAI API key on the 'Login' page. located at the top of the extension. (You can also enter your org id, but this is not mandatory)
+4. Select an intelligent agent from the dropdown list.
+5. Start chatting with the selected agent.
+
+# Key Features
+
+- Specialized Intelligent Agents: The application allows you to interact with intelligent agents trained using RAG techniques, enabling them to provide relevant and accurate responses in various knowledge areas.
+- Markdown Rendering and Syntax Highlighting: The application renders Markdown content and highlights code syntax, improving readability and user experience when visualizing formatted content, such as tables, code snippets, etc.
+- Conversation Storage: Conversations with the agents are stored in Chrome's local storage, allowing you to resume your conversations at any time.
+- Agent Selection: You can select different intelligent agents based on your needs, each specialized in a specific area.
+
 
 > To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
