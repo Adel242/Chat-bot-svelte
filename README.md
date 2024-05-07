@@ -47,8 +47,8 @@ pnpm build or npm run build
 ```
 
 # Loading the Extension in Google Chrome
-1.Open Google Chrome and navigate to chrome://extensions/.
-2.Enable "Developer mode" in the top-right corner
+1. Open Google Chrome and navigate to chrome://extensions/.
+2. Enable "Developer mode" in the top-right corner
 3. Click "Load unpacked" and select the file 'build' directory of the project.
 The extension will be loaded into your Chrome browser.
 
