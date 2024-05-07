@@ -77,8 +77,8 @@
 
 	p {
 		font-family: 'Inter', sans-serif;
-		font-size: 1.5rem;
-		color: #1212d3;
+		font-size: 1rem;
+		color: #ffffff;
 		text-align: center;
 	}
 

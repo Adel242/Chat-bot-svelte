@@ -6,7 +6,6 @@
 		{
 			url: '/',
 			label: 'Home',
-			// img: '/favicon-16.png'
 		},
 		{
 			url: '/settings',

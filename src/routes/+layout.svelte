@@ -34,7 +34,7 @@
 		if (!apiKey) return
 		const userData = await fetchUserData(apiKey)
 		if (!userData) {
-			toast.error('Invalid API key') // pensar edicion
+			toast.error('Invalid API key')
 			user.set(null)
 			return
 		}

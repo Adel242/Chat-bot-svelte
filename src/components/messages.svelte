@@ -19,7 +19,7 @@
 	let inputValue = ''
 	$: currentAgent = $avatarAgents.find((agent) => agent.id === $selectedAgent)
 	let stopGenerating = false
-	let abortController;
+	let abortController
 
 	selectedAgent.subscribe(async () => {
 		if (!$selectedAgent) return
@@ -67,7 +67,7 @@
 		renderingMessage = true
 		stopGenerating = false
 		chatMessages.scrollTop = chatMessages.scrollHeight
-		abortController = new AbortController();
+		abortController = new AbortController()
 
 		const headers: HeadersInit = {
 			Authorization: `Bearer ${$credentials.apiKey}`,
@@ -84,9 +84,8 @@
 				format: 'json',
 				messages,
 				agentId: $selectedAgent
-			}),
-			signal: abortController.signal
-		});
+			})
+		})
 
 		if (!res.ok) {
 			console.error('Failed to send message')
@@ -96,12 +95,12 @@
 			]
 			loading = false
 			renderingMessage = false
-			return;
+			return
 		}
 
 		for await (const chunk of streamReader(res)) {
 			if (stopGenerating) {
-				break;
+				break
 			}
 			if (messages[messages.length - 1].role !== 'assistant') {
 				messages = [...messages, { role: 'assistant', content: '', createdAt: Date.now() }]
@@ -130,7 +129,6 @@
 	{#each messages as { content, role }}
 		<div class=" mb-3 {role === 'user' ? 'justify-end' : 'justify-start'}">
 			<div class="rounded-lg py-0 px-0 max-w-[100]">
-				<!-- {@html marked.parse(content, { renderer })} -->
 				{#if role === 'assistant' && selectedAgent}
 					<div class="flex items-center">
 						<img src={currentAgent?.image} alt="Agent" class="w-5 h-5 mr-2 rounded-full" />
@@ -151,12 +149,8 @@
 		<Loader />
 	{/if}
 </div>
-<!-- {#if messages.length}
-	<CleanChat on:click={cleanMessages} />
-{/if} -->
 
 <div class="border-zinc-100 border rounded-md bg-zinc-800 p-1 h-18 mt-auto">
-	<!---resolver optimizacion de mt-auto-->
 	<form on:submit|preventDefault={handleSubmit} class=" w-full">
 		<textarea
 			name="input"
@@ -175,7 +169,7 @@
 				{#if renderingMessage && !loading}
 					<button
 						type="button"
-						class="bg-black text-white py-1 px-2 rounded-md text-xs"
+						class="bg-black text-white py-1 px-2 border rounded-md border-red-500 text-xs"
 						on:click={stopGeneration}
 					>
 						Stop

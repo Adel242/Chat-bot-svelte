@@ -8,7 +8,7 @@ html, body {
 
 .loader {
 	width: 20px;
-	background: radial-gradient(circle closest-side, #000 90%, #0000) 0 / calc(100% / 3) 100% space;
+	background: radial-gradient(circle closest-side, #26d3b6 90%, #e20606) 0 / calc(100% / 3) 100% space;
 	clip-path: inset(0 100% 0 0);
 	animation: l1 1s steps(4) infinite;
 }
