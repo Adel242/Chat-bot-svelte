@@ -39,8 +39,6 @@ pnpm dev or npm run dev
 ```
 The application will be available at http://localhost:5173 for pnpm or http://localhost:3000 for npm .
 
-##Getting Started with create-svelte
-
 # Production Build
 To build the application for production, run one of the following commands:
 
