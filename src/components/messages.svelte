@@ -21,6 +21,10 @@
 	let stopGenerating = false
 	let abortController
 
+	const scrollToBottom = () => {
+		chatMessages.scrollTop = chatMessages.scrollHeight
+	}
+
 	selectedAgent.subscribe(async () => {
 		if (!$selectedAgent) return
 		const storage = await getChromeStorage([`${$selectedAgent}-messages`])
@@ -109,6 +113,8 @@
 			}
 			messages[messages.length - 1].content += chunk
 		}
+		
+		scrollToBottom();
 
 		renderingMessage = false
 		await setChromeStorage({ [`${$selectedAgent}-messages`]: messages })
@@ -117,6 +123,7 @@
 	const stopGeneration = () => {
 		stopGenerating = true
 	}
+
 </script>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/rippleui@1.12.1/dist/css/styles.css" />
