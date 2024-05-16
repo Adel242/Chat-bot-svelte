@@ -6,6 +6,12 @@
 
 	export let content = ''
 
+	// $: {
+	// 	if (content) {
+	// 		content = content.replace(/\\\"/g, '"')
+	// 	}
+	// }
+
 	const marked = new Marked(
 		markedHighlight({
 			langPrefix: 'hljs language-',

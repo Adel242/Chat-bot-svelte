@@ -45,7 +45,7 @@ body {
 
 /* code blocks ↓ */
 
-.language {
+/* .language {
 	background-color: rgb(39 39 42);
 	border-radius: 0.5rem;
 	padding: 0.2rem;
@@ -53,7 +53,7 @@ body {
 	border: solid 0.1rem rgb(63 63 70);
 	display: flex;
 	align-items: center;
-}
+} */
 
 /* .language .languaje-icon {
 	padding: 10px;
