@@ -1,25 +1,25 @@
 <script lang="ts" src="https://cdn.tailwindcss.com ">
-	import CleanChat from './clean-chat.svelte'
-	import { streamReader } from '../lib/stream-reader'
-	import type { Message } from '../types'
-	import Loader from './loader.svelte'
-	import { BASE_API_URL } from '$lib/api'
-	import { credentials } from '../stores/credentials-store'
-	import { getChromeStorage, removeChromeStorage, setChromeStorage } from '$lib/chrome-storage'
-	import { selectedAgent } from '../stores/agent-store'
-	import { toast } from 'svelte-sonner'
-	import Markdown from './markdown.svelte'
-	import { avatarAgents } from '../stores/avatarAgents'
-	import { user } from '../stores/users-store'
+	import CleanChat from './clean-chat.svelte';
+	import { streamReader } from '../lib/stream-reader';
+	import type { Message } from '../types';
+	import Loader from './loader.svelte';
+	import { BASE_API_URL } from '$lib/api';
+	import { credentials } from '../stores/credentials-store';
+	import { getChromeStorage, removeChromeStorage, setChromeStorage } from '$lib/chrome-storage';
+	import { selectedAgent } from '../stores/agent-store';
+	import { toast } from 'svelte-sonner';
+	import Markdown from './markdown.svelte';
+	import { avatarAgents } from '../stores/avatarAgents';
+	import { user } from '../stores/users-store';
 
-	let chatMessages: HTMLDivElement
-	let messages: Message[] = []
-	let loading = false
-	let renderingMessage = false
-	let inputValue = ''
-	$: currentAgent = $avatarAgents.find((agent) => agent.id === $selectedAgent)
-	let stopGenerating = false
-	let abortController
+	let chatMessages: HTMLDivElement;
+	let messages: Message[] = [];
+	let loading = false;
+	let renderingMessage = false;
+	let inputValue = '';
+	$: currentAgent = $avatarAgents.find((agent) => agent.id === $selectedAgent);
+	let stopGenerating = false;
+	let abortController;
 
 	const scrollToBottom = () => {
 		chatMessages.scrollTop = chatMessages.scrollHeight

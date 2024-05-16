@@ -6,6 +6,12 @@
 
 	export let content = ''
 
+	$: {
+		if (content) {
+			content = content.replace(/\\\"/g, '"')
+		}
+	}
+
 	const marked = new Marked(
 		markedHighlight({
 			langPrefix: 'hljs language-',
@@ -31,14 +37,15 @@
 							</svg>
 						</div>
 						<div <class="item-center">${language}</div>
+						
 					</div>` + hljs.highlight(code, { language }).value
 				)
 			}
 		})
 	)
+	// marked.setOptions({ pedantic: false })
 </script>
 
 <div class="markdown overflow-auto">
 	{@html marked.parse(content)}
 </div>
-
