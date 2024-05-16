@@ -113,7 +113,7 @@
 			}
 			messages[messages.length - 1].content += chunk
 		}
-		
+
 		scrollToBottom();
 
 		renderingMessage = false
@@ -157,26 +157,27 @@
 	{/if}
 </div>
 
-<div class="border-zinc-100 border rounded-md bg-zinc-800 p-1 h-18 mt-auto">
-	<form on:submit|preventDefault={handleSubmit} class=" w-full">
+<footer>
+	<form on:submit|preventDefault={handleSubmit} class="w-full flex">
 		<textarea
 			name="input"
-			class="w-full bg-zinc-800 resize-none p-1 outline-none rounded-md text-xs"
+			class="textarea resize-none text-xs textarea-block"
+			cols="100"
+			rows="1"
 			placeholder="Type your message..."
 			bind:value={inputValue}
-			style="font-size: 0.875rem; height: 2.5rem;"
 		></textarea>
-		<div class=" flex flex-grow justify-between items-end">
-			<div class="flex items-ends">
+		<div class="flex flex-grow justify-between items-center gap-2">
+			<div class="flex items-center">
 				{#if messages.length}
 					<CleanChat on:click={cleanMessages} />
 				{/if}
 			</div>
-			<div class="ml-1">
+			<div>
 				{#if renderingMessage && !loading}
 					<button
 						type="button"
-						class="bg-black text-white py-1 px-2 border rounded-md border-red-500 text-xs"
+						class="btn btn-error btn-sm"
 						on:click={stopGeneration}
 					>
 						Stop
@@ -184,7 +185,7 @@
 				{:else}
 					<button
 						type="submit"
-						class="bg-white text-black py-1 px-2 rounded-md text-xs"
+						class="btn btn-primary"
 						disabled={loading || inputValue.trim().length < 1}
 						style="cursor: pointer;"
 					>
@@ -194,4 +195,4 @@
 			</div>
 		</div>
 	</form>
-</div>
+</footer>

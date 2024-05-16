@@ -12,10 +12,9 @@
 		if (!apiKey) {
 			return
 		}
-	
 		const userData = await fetchUserData(apiKey)
 		if (!userData) {
-			toast.error('Please insert API key valid')
+			toast.error('Please insert API key valid', { position: 'bottom-center'})
 			user.set(null)
 			return
 		}
@@ -43,10 +42,10 @@
 </script>
 
 <div
-	class="w-[24rem] h-[36rem] max-h-[36rem] grid grid-rows-[auto_1fr] bg-slate-800 text-white mx-auto"
+	class="h-[36rem] grid grid-rows-[auto_1fr] mx-auto"
 >
 	<Navbar />
 	<slot />
 </div>
 
-<Toaster theme="dark" position="top-center" richColors />
+<Toaster theme="dark" position="bottom-center" richColors closeButton />

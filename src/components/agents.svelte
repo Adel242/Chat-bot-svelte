@@ -9,7 +9,10 @@
 
 	credentials.subscribe(async ({ apiKey, orgId }) => {
 		if (!apiKey) {
-			toast.warning('Please enter an api key')
+			toast.warning('Please enter an api key', {
+				position: 'bottom-center',
+				actionButtonStyle: 'bg-black',
+			})
 			return
 		};
 
@@ -24,7 +27,7 @@
 		});
 
 		if (!res.ok) {
-			toast.error(`Failed to fetch agents`)
+			toast.error(`Failed to fetch agents`, { position: "bottom-center" })
 			return
 		};
 
@@ -42,17 +45,9 @@
 	};
 </script>
 
-<select class="w-full ml-2 text-sm border-gray-500 border rounded-md bg-zinc-950" bind:value={$selectedAgent} on:change={handleChange}>
+<select class="select" bind:value={$selectedAgent} on:change={handleChange}>
 	<option value="" disabled selected>Select an agent</option>
 	{#each $avatarAgents as { id, name } (id)}
 		<option value={id}>{name}</option>
 	{/each}
 </select>
-
-<style>
-	select {
-		font-size: 0.8rem;
-		cursor: pointer;
-		outline: none;
-	}
-</style>

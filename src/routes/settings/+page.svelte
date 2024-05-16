@@ -31,55 +31,43 @@
 	}
 </script>
 
-<main class="flex flex-col h-full items-center justify-center bg-zinc-800">
-	<img src="/favicon-16.png" class="w-[25%] m-2" alt="CodeGPT Logo" />
-	<p>CODE GPT THE EXTENSION EXPERIENCE</p>
-	<section class="bg-zinc-800  rounded-lg">
-		<div class="p-8 shadow-lg">
-			<form class="space-y-4" on:submit|preventDefault={handleSubmit}>
-				<div class="w-full grid gap-2">
-					<!-- <label for="apiKey" class="ml-2">ApiKey</label> -->
-					<input
-						value={$credentials.apiKey}
-						class="input input-solid max-w-full"
-						placeholder="apikey"
-						type="password"
-						id="apiKey"
-						name="apiKey"
-					/>
-				</div>
-
-				<div class="w-full grid gap-2">
-					<!-- <label for="orgId" class="ml-2">Org ID</label> -->
-					<input
-						value={$credentials.orgId}  
-						class="input input-solid max-w-full"
-						placeholder="org id"
-						type="text"
-						id="orgId"
-						name="orgId"
-					/>
-				</div>
-
-				<div class="mt-4">
-					<button type="submit" class="bg-white text-black py-1 px-2 rounded-md text-xs w-full">Log in</button>
+<main class="flex flex-col h-full items-center justify-center">
+	<div class="max-w-md m-auto grid gap-2">
+		<section class="w-full">
+			<h1 class="font-bold">Sign In</h1>
+		</section>
+		<section>
+			<form class="card" on:submit|preventDefault={handleSubmit}>
+				<div class="card-body">
+					<div class="grid gap-2">
+						<div class="w-full grid gap-2">
+							<label for="apiKey" class="text-xs text-gray-300">ApiKey</label>
+							<input
+								value={$credentials.apiKey}
+								class="input max-w-full"
+								placeholder="sk-*****"
+								type="password"
+								id="apiKey"
+								name="apiKey"
+							/>
+						</div>
+						<div class="w-full grid gap-2">
+							<label for="orgId" class="text-xs text-gray-300">Org ID</label>
+							<input
+								value={$credentials.orgId}
+								class="input max-w-full"
+								placeholder="organization ID"
+								type="text"
+								id="orgId"
+								name="orgId"
+							/>
+						</div>
+					</div>
+					<div class="card-footer">
+						<button type="submit" class="btn btn-primary btn-sm">Sign In</button>
+					</div>
 				</div>
 			</form>
-		</div>
-	</section>
+		</section>
+	</div>
 </main>
-
-<style>
-	input{
-		border : 1px solid #d9d9e3;
-		border-radius : 0.4rem
-	}
-
-	p {
-		font-family: 'Inter', sans-serif;
-		font-size: 1rem;
-		color: #ffffff;
-		text-align: center;
-	}
-
-</style>
