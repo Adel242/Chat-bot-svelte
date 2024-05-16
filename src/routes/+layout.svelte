@@ -26,7 +26,7 @@
 		const storage = await getChromeStorage(['apiKey', 'orgId'])
 		if (!storage) return
 
-		const apiKey = 'sk-5364afde-2c81-4e2a-8d09-690d76db212c'// storage['apiKey'] ?? ''
+		const apiKey = storage['apiKey'] ?? ''
 		const orgId = storage['orgId'] ?? ''
 
 		credentials.set({ apiKey, orgId })
