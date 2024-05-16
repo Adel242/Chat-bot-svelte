@@ -18,6 +18,7 @@
 			user.set(null)
 			return
 		}
+		toast.success('Connection Success')
 		user.set(userData)
 	});
 
@@ -25,7 +26,7 @@
 		const storage = await getChromeStorage(['apiKey', 'orgId'])
 		if (!storage) return
 
-		const apiKey = storage['apiKey'] ?? ''
+		const apiKey = 'sk-5364afde-2c81-4e2a-8d09-690d76db212c'// storage['apiKey'] ?? ''
 		const orgId = storage['orgId'] ?? ''
 
 		credentials.set({ apiKey, orgId })
@@ -41,9 +42,7 @@
 	});
 </script>
 
-<div
-	class="h-[36rem] grid grid-rows-[auto_1fr] mx-auto"
->
+<div class="h-[36rem] grid grid-rows-[auto_1fr] mx-auto">
 	<Navbar />
 	<slot />
 </div>

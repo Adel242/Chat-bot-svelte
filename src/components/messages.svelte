@@ -1,5 +1,4 @@
 <script lang="ts" src="https://cdn.tailwindcss.com ">
-	import CleanChat from './clean-chat.svelte'
 	import { streamReader } from '../lib/stream-reader'
 	import type { Message } from '../types'
 	import Loader from './loader.svelte'
@@ -36,13 +35,6 @@
 
 		messages = storedMessages
 	})
-
-	const cleanMessages = async () => {
-		// const confirmation = confirm('Are you sure you want to delete all chat messages?')
-		// if (!confirmation) return
-		messages = []
-		await removeChromeStorage(`${$selectedAgent}-messages`)
-	}
 
 	const handleSubmit = async (e: SubmitEvent & { currentTarget: HTMLFormElement }) => {
 		e.preventDefault()
@@ -120,59 +112,58 @@
 		await setChromeStorage({ [`${$selectedAgent}-messages`]: messages })
 	}
 
+	function handleKeyPress(e: any) {
+		if (e.key === 'Enter' && !e.shiftKey) {
+			e.preventDefault()
+			document.getElementById('sendButton')?.click()
+		}
+	}
+
 	const stopGeneration = () => {
 		stopGenerating = true
 	}
 
 </script>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/rippleui@1.12.1/dist/css/styles.css" />
-
 <div
 	id="chat-messages"
 	bind:this={chatMessages}
-	class="chat-messages p-2 overflow-y-auto max-h-[26rem] text-sm"
+	class="chat-messages p-3 overflow-y-auto text-sm flex flex-col gap-4 max-h-[26rem]"
 >
 	{#each messages as { content, role }}
-		<div class=" mb-3 {role === 'user' ? 'justify-end' : 'justify-start'}">
-			<div class="rounded-lg py-0 px-0 max-w-[100]">
-				{#if role === 'assistant' && selectedAgent}
-					<div class="flex items-center">
-						<img src={currentAgent?.image} alt="Agent" class="w-5 h-5 mr-2 rounded-full" />
-						<div>{currentAgent?.name}</div>
-					</div>
-				{/if}
-				{#if role === 'user'}
-					<div class="flex items-center">
-						<img src={$user?.avatar_url} alt={$user?.full_name} class="w-5 h-5 mr-2 rounded-full" />
-						<div>{$user?.full_name}</div>
-					</div>
-				{/if}
-				<Markdown {content} />
-			</div>
-		</div>
+		<section class="grid gap-4">
+			{#if role === 'assistant' && selectedAgent}
+				<div class="flex items-center gap-2">
+					<img src={currentAgent?.image} alt="Agent" class="w-6 h-6 rounded-full" />
+					<div>{currentAgent?.name}</div>
+				</div>
+			{/if}
+			{#if role === 'user'}
+				<div class="flex items-center gap-2">
+					<img src={$user?.avatar_url} alt={$user?.full_name} class="w-6 h-6 rounded-full" />
+					<div>{$user?.full_name}</div>
+				</div>
+			{/if}
+			<Markdown {content} />
+		</section>
 	{/each}
 	{#if loading}
-		<Loader />
+		<button class="btn btn-loading btn-outline btn-sm border w-fit">Thinking</button>
 	{/if}
 </div>
 
 <footer>
-	<form on:submit|preventDefault={handleSubmit} class="w-full flex">
+	<form on:submit|preventDefault={handleSubmit} class="w-full flex gap-2">
 		<textarea
 			name="input"
-			class="textarea resize-none text-xs textarea-block"
+			class="textarea resize-none text-sm textarea-block"
 			cols="100"
 			rows="1"
 			placeholder="Type your message..."
 			bind:value={inputValue}
-		></textarea>
+			on:keypress={handleKeyPress}
+		/>
 		<div class="flex flex-grow justify-between items-center gap-2">
-			<div class="flex items-center">
-				{#if messages.length}
-					<CleanChat on:click={cleanMessages} />
-				{/if}
-			</div>
 			<div>
 				{#if renderingMessage && !loading}
 					<button
@@ -184,6 +175,7 @@
 					</button>
 				{:else}
 					<button
+						id='sendButton'
 						type="submit"
 						class="btn btn-primary"
 						disabled={loading || inputValue.trim().length < 1}

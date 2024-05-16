@@ -40,7 +40,6 @@
 		const storage = await getChromeStorage([`${$selectedAgent}-messages`])
 		if (!storage) return
 		const storageMessages = storage['messages'] ?? []
-
 		messages.set(storageMessages)
 	};
 </script>
