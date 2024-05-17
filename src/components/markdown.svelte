@@ -1,10 +1,16 @@
 <script lang="ts">
-	import { Marked } from 'marked'
-	import { markedHighlight } from 'marked-highlight'
-	import hljs from 'highlight.js'
-	import 'highlight.js/styles/nord.min.css'
+	import { Marked } from 'marked';
+	import { markedHighlight } from 'marked-highlight';
+	import hljs from 'highlight.js';
+	import 'highlight.js/styles/nord.min.css';
 
 	export let content = ''
+
+	$: {
+		if (content) {
+			content = content.replace(/\\\"/g, '"')
+		}
+	}
 
 	const marked = new Marked(
 		markedHighlight({
@@ -31,14 +37,15 @@
 							</svg>
 						</div>
 						<div <class="item-center">${language}</div>
+						
 					</div>` + hljs.highlight(code, { language }).value
 				)
 			}
 		})
 	)
+	// marked.setOptions({ pedantic: false })
 </script>
 
 <div class="markdown overflow-auto">
 	{@html marked.parse(content)}
 </div>
-
