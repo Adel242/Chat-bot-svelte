@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { Marked } from 'marked'
-	import { markedHighlight } from 'marked-highlight'
-	import hljs from 'highlight.js'
-	import 'highlight.js/styles/nord.min.css'
+	import { Marked } from 'marked';
+	import { markedHighlight } from 'marked-highlight';
+	import hljs from 'highlight.js';
+	import 'highlight.js/styles/nord.min.css';
 
 	export let content = ''
 

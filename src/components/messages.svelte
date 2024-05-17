@@ -1,8 +1,7 @@
 <script lang="ts" src="https://cdn.tailwindcss.com ">
-	import CleanChat from './clean-chat.svelte';
 	import { streamReader } from '../lib/stream-reader';
 	import type { Message } from '../types';
-	import Loader from './loader.svelte';
+	// import Loader from './loader.svelte';
 	import { BASE_API_URL } from '$lib/api';
 	import { credentials } from '../stores/credentials-store';
 	import { getChromeStorage, removeChromeStorage, setChromeStorage } from '$lib/chrome-storage';
@@ -11,6 +10,8 @@
 	import Markdown from './markdown.svelte';
 	import { avatarAgents } from '../stores/avatarAgents';
 	import { user } from '../stores/users-store';
+	import Loader from './loader.svelte'
+	import CleanChat from './clean-chat.svelte'
 
 	let chatMessages: HTMLDivElement;
 	let messages: Message[] = [];
