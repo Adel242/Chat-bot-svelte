@@ -1,13 +1,11 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import LogotypeWide from './LogotypeWide.svelte';
-	import { credentials } from '../stores/credentials-store';
-	import Agents from './agents.svelte'
+	import { page } from '$app/stores'
+	import Agents from '../components/agents.svelte'
 
 	const links = [
 		{
 			url: '/',
-			label: 'Chat',
+			label: 'Home',
 		},
 		{
 			url: '/settings',
@@ -28,17 +26,13 @@
 	</div>
 	<div class="navbar-end">
 		{#each links as { url, label } (url)}
-		{#if url === '/settings' || $credentials.apiKey}
-        <a
-          class="text-sm font-semibold text-foreground
-            {$page.url.pathname === url && 'link-primary'}" 
-          href={url}
-        >
-          {label}
-        </a>
-      {/if}
-				
-	
+			<a
+				class="navbar-item
+        		{$page.route.id === url && 'link-primary'}"
+				href={url}
+			>
+				{label}
+			</a>
 		{/each}
 	</div>
 </div>
