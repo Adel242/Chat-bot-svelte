@@ -47,4 +47,13 @@
 	<slot />
 </div>
 
-<Toaster theme="dark" position="bottom-center" richColors closeButton />
+<Toaster
+	theme="dark"
+	position="bottom-right"
+	richColors
+	closeButton
+	visibleToasts={1}
+	toastOptions={{
+		duration: 1000
+	}}
+/>

@@ -50,9 +50,10 @@
 								id="apiKey"
 								name="apiKey"
 							/>
+							<small class="text-xs text-gray-500"></small>
 						</div>
 						<div class="w-full grid gap-2">
-							<label for="orgId" class="text-xs text-gray-300">Org ID</label>
+							<label for="orgId" class="text-xs text-gray-300">Org ID – Optional</label>
 							<input
 								value={$credentials.orgId}
 								class="input max-w-full"

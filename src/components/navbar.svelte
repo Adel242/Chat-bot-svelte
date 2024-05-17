@@ -9,7 +9,7 @@
 		},
 		{
 			url: '/settings',
-			label: 'Log in'
+			label: 'sign in'
 		}
 	] as const
 </script>
