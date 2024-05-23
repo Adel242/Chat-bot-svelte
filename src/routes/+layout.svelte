@@ -19,7 +19,7 @@
 			user.set(null)
 			return
 		}
-		toast.success('Connection Success')
+		// toast.success('Connection Success')
 		user.set(userData)
 	})
 

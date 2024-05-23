@@ -168,7 +168,9 @@
 		</section>
 	{/each}
 	{#if $loading}
-		<button class="btn btn-loading btn-outline btn-xs border w-fit">Thinking</button>
+		<button class="btn btn-loading btn-outline btn-xs border w-fit text-gray-500 opacity-80"
+			>Thinking</button
+		>
 	{/if}
 </div>
 
