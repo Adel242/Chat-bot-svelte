@@ -1,48 +1,57 @@
 <script lang="ts" src="https://cdn.tailwindcss.com ">
-	import CleanChat from './clean-chat.svelte'
-	import { streamReader } from '../lib/stream-reader'
-	import type { Message } from '../types'
-	import Loader from './loader.svelte'
-	import { BASE_API_URL } from '$lib/api'
-	import { credentials } from '../stores/credentials-store'
-	import { getChromeStorage, removeChromeStorage, setChromeStorage } from '$lib/chrome-storage'
-	import { selectedAgent } from '../stores/agent-store'
-	import { toast } from 'svelte-sonner'
-	import Markdown from './markdown.svelte'
-	import { avatarAgents } from '../stores/avatarAgents'
-	import { user } from '../stores/users-store'
+	import { streamReader } from '../lib/stream-reader';
+	import type { Message } from '../types';
+	// import Loader from './loader.svelte'
+	import { BASE_API_URL } from '$lib/api';
+	import { credentials } from '../stores/credentials-store';
+	import { getChromeStorage, removeChromeStorage, setChromeStorage } from '$lib/chrome-storage';
+	import { selectedAgent } from '../stores/agent-store';
+	import { toast } from 'svelte-sonner';
+	import Markdown from './markdown.svelte';
+	import { avatarAgents } from '../stores/avatarAgents';
+	import { user } from '../stores/users-store';
+	import { clearMessages } from '../stores/clearChat';
+	import {loading} from '../stores/loading-store';
+	import {messages} from '../stores/messages-store';
+	import { isModelStreaming } from '../stores/is-model-streaming-store';
 
 	let chatMessages: HTMLDivElement
-	let messages: Message[] = []
-	let loading = false
+	// let messages: Message[] = []
 	let renderingMessage = false
 	let inputValue = ''
 	$: currentAgent = $avatarAgents.find((agent) => agent.id === $selectedAgent)
 	let stopGenerating = false
 	let abortController
+	let lastCleared = Date.now()
+
+	clearMessages.subscribe((value) => {
+		if (value) {
+			cleanMessages()
+			clearMessages.set(false)
+		}
+	});
+
+	const cleanMessages = async () => {
+		await removeChromeStorage(`${$selectedAgent}-messages`)
+		$messages = []
+		lastCleared = Date.now()
+	};
 
 	const scrollToBottom = () => {
 		chatMessages.scrollTop = chatMessages.scrollHeight
-	}
+	};
 
 	selectedAgent.subscribe(async () => {
 		if (!$selectedAgent) return
 		const storage = await getChromeStorage([`${$selectedAgent}-messages`])
 		if (!storage) {
-			messages = []
+			$messages = []
 			return
 		}
 		const storedMessages = storage[`${$selectedAgent}-messages`] ?? []
 
-		messages = storedMessages
-	})
-
-	const cleanMessages = async () => {
-		// const confirmation = confirm('Are you sure you want to delete all chat messages?')
-		// if (!confirmation) return
-		messages = []
-		await removeChromeStorage(`${$selectedAgent}-messages`)
-	}
+		$messages = storedMessages
+	});
 
 	const handleSubmit = async (e: SubmitEvent & { currentTarget: HTMLFormElement }) => {
 		e.preventDefault()
@@ -52,14 +61,14 @@
 			toast.warning('Please select an agent')
 			return
 		}
-		if (input.length < 3 || loading || renderingMessage) {
+		if (input.length < 3 || $loading || renderingMessage) {
 			return
 		}
 
 		e.currentTarget.reset()
 
-		messages = [
-			...messages,
+		$messages = [
+			...$messages,
 			{
 				role: 'user',
 				content: input,
@@ -67,7 +76,7 @@
 			}
 		]
 
-		loading = true
+		$loading = true
 		renderingMessage = true
 		stopGenerating = false
 		chatMessages.scrollTop = chatMessages.scrollHeight
@@ -86,106 +95,106 @@
 			body: JSON.stringify({
 				stream: true,
 				format: 'json',
-				messages,
+				messages: $messages,
 				agentId: $selectedAgent
 			})
 		})
 
 		if (!res.ok) {
 			console.error('Failed to send message')
-			messages = [
-				...messages,
+			$messages = [
+				...$messages,
 				{ role: 'assistant', content: 'Failed to send message', createdAt: Date.now() }
 			]
-			loading = false
+			$loading = false
 			renderingMessage = false
 			return
 		}
+
+		$isModelStreaming = true 
 
 		for await (const chunk of streamReader(res)) {
 			if (stopGenerating) {
 				break
 			}
-			if (messages[messages.length - 1].role !== 'assistant') {
-				messages = [...messages, { role: 'assistant', content: '', createdAt: Date.now() }]
-				loading = false
+			if ($messages[$messages.length - 1].role !== 'assistant') {
+				$messages = [...$messages, { role: 'assistant', content: '', createdAt: Date.now() }]
+				$loading = false
 				chatMessages.scrollTop = chatMessages.scrollHeight
 			}
-			messages[messages.length - 1].content += chunk
+			$messages[$messages.length - 1].content += chunk
 		}
-		
-		scrollToBottom();
+
+		$isModelStreaming = false
+
+		scrollToBottom()
 
 		renderingMessage = false
-		await setChromeStorage({ [`${$selectedAgent}-messages`]: messages })
+		await setChromeStorage({ [`${$selectedAgent}-messages`]: $messages })
+	}
+
+	function handleKeyPress(e: any) {
+		if (e.key === 'Enter' && !e.shiftKey) {
+			e.preventDefault()
+			document.getElementById('sendButton')?.click()
+		}
 	}
 
 	const stopGeneration = () => {
 		stopGenerating = true
 	}
-
 </script>
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/rippleui@1.12.1/dist/css/styles.css" />
 
 <div
 	id="chat-messages"
 	bind:this={chatMessages}
-	class="chat-messages p-2 overflow-y-auto max-h-[26rem] text-sm"
+	class="chat-messages p-3 overflow-y-auto text-sm flex flex-col gap-4 max-h-[26rem]"
 >
-	{#each messages as { content, role }}
-		<div class=" mb-3 {role === 'user' ? 'justify-end' : 'justify-start'}">
-			<div class="rounded-lg py-0 px-0 max-w-[100]">
-				{#if role === 'assistant' && selectedAgent}
-					<div class="flex items-center">
-						<img src={currentAgent?.image} alt="Agent" class="w-5 h-5 mr-2 rounded-full" />
-						<div>{currentAgent?.name}</div>
-					</div>
-				{/if}
-				{#if role === 'user'}
-					<div class="flex items-center">
-						<img src={$user?.avatar_url} alt={$user?.full_name} class="w-5 h-5 mr-2 rounded-full" />
-						<div>{$user?.full_name}</div>
-					</div>
-				{/if}
-				<Markdown {content} />
-			</div>
-		</div>
+	{#each $messages as { content, role }}
+		<section class="grid gap-4">
+			{#if role === 'assistant' && selectedAgent}
+				<div class="flex items-center gap-2">
+					<img src={currentAgent?.image} alt="Agent" class="w-6 h-6 rounded-full" />
+					<div>{currentAgent?.name}</div>
+				</div>
+			{/if}
+			{#if role === 'user'}
+				<div class="flex items-center gap-2">
+					<img src={$user?.avatar_url} alt={$user?.full_name} class="w-6 h-6 rounded-full" />
+					<div>{$user?.full_name}</div>
+				</div>
+			{/if}
+			<Markdown {content} />
+		</section>
 	{/each}
-	{#if loading}
-		<Loader />
+	{#if $loading}
+		<button class="btn btn-$loading btn-outline btn-sm border w-fit">Thinking</button>
 	{/if}
 </div>
 
-<div class="border-zinc-100 border rounded-md bg-zinc-800 p-1 h-18 mt-auto">
-	<form on:submit|preventDefault={handleSubmit} class=" w-full">
+<footer>
+	<form on:submit|preventDefault={handleSubmit} class="w-full flex gap-2">
 		<textarea
 			name="input"
-			class="w-full bg-zinc-800 resize-none p-1 outline-none rounded-md text-xs"
+			class="textarea resize-none text-sm textarea-block"
+			cols="100"
+			rows="1"
 			placeholder="Type your message..."
 			bind:value={inputValue}
-			style="font-size: 0.875rem; height: 2.5rem;"
-		></textarea>
-		<div class=" flex flex-grow justify-between items-end">
-			<div class="flex items-ends">
-				{#if messages.length}
-					<CleanChat on:click={cleanMessages} />
-				{/if}
-			</div>
-			<div class="ml-1">
-				{#if renderingMessage && !loading}
-					<button
-						type="button"
-						class="bg-black text-white py-1 px-2 border rounded-md border-red-500 text-xs"
-						on:click={stopGeneration}
-					>
+			on:keypress={handleKeyPress}
+		/>
+		<div class="flex flex-grow justify-between items-center gap-2">
+			<div>
+				{#if renderingMessage && !$loading}
+					<button type="button" class="btn btn-error btn-sm" on:click={stopGeneration}>
 						Stop
 					</button>
 				{:else}
 					<button
+						id="sendButton"
 						type="submit"
-						class="bg-white text-black py-1 px-2 rounded-md text-xs"
-						disabled={loading || inputValue.trim().length < 1}
+						class="btn btn-primary"
+						disabled={$loading || inputValue.trim().length < 1}
 						style="cursor: pointer;"
 					>
 						Send
@@ -194,4 +203,4 @@
 			</div>
 		</div>
 	</form>
-</div>
+</footer>

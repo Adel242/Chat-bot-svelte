@@ -2,27 +2,50 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body {
-	max-width: 100%;
-  }
-
-.loader {
-	width: 20px;
-	background: radial-gradient(circle closest-side, #26d3b6 90%, #e20606) 0 / calc(100% / 3) 100% space;
-	clip-path: inset(0 100% 0 0);
-	animation: l1 1s steps(4) infinite;
-}
-
 @keyframes l1 {
 	to {
 		clip-path: inset(0 -34% 0 0);
 	}
 }
 
+html,
+body {
+	max-width: 100%;
+}
+
+html {
+	font-size: 16px;
+}
+
+body {
+	font-size: 1rem;
+	scroll-behavior: smooth;
+	scrollbar-width: thin;
+	scrollbar-color: var(--tw-bg-opacity) var(--tw-bg-opacity);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	shape-rendering: geometricprecision;
+	text-rendering: optimizeLegibility;
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+	-webkit-text-size-adjust: 100%;
+	-moz-text-size-adjust: 100%;
+	-ms-text-size-adjust: 100%;
+	text-size-adjust: 100%;
+	-webkit-overflow-scrolling: touch;
+	hyphens: auto;
+}
+
+.loader {
+	width: 20px;
+	background: radial-gradient(circle closest-side, #26d3b6 90%, #e20606) 0 / calc(100% / 3) 100%
+		space;
+	clip-path: inset(0 100% 0 0);
+	animation: l1 1s steps(4) infinite;
+}
+
 /* code blocks ↓ */
 
-.language {
-	
+/* .language {
 	background-color: rgb(39 39 42);
 	border-radius: 0.5rem;
 	padding: 0.2rem;
@@ -30,28 +53,28 @@ html, body {
 	border: solid 0.1rem rgb(63 63 70);
 	display: flex;
 	align-items: center;
-}
+} */
 
 /* .language .languaje-icon {
 	padding: 10px;
-  	background-color: aqua;
-  	margin-right: 2px;
+	background-color: aqua;
+	margin-right: 2px;
 } */
 
- .markdown code {
-	/* background-color: rgb(9, 9, 11, 0.6); */
-	/* overflow-x: auto;  */
-	color: #ffffff; 
+/* background-color: rgb(9, 9, 11, 0.6); */
+/* overflow-x: auto;  */
+/* .markdown code {
+	color: #ffffff;
 	border-radius: 0.5rem 0.5rem 0 0;
 	font-family: 'Courier New', Courier, monospace;
-	font-size: 0.9rem; 
-	display: inline-block; 
-	line-height: 1.4; 
+	font-size: 0.9rem;
+	display: inline-block;
+	line-height: 1.4;
 	border: solid 1 px #3f3f46;
-	margin: 0.5rem 0 0.5rem 0
-  }
+	margin: 0.5rem 0 0.5rem 0;
+} */
 
- /* .markdown pre {
+/* .markdown pre {
 	background-color: rgb(0, 0, 0);
 	color: #c5c9c6; 
 	border-radius: 0 0 0.5rem 0.5rem;
@@ -140,6 +163,10 @@ html, body {
 
 .markdown td:last-child {
 	border-right-width: 1px;
+}
+
+.markdown code {
+	display: grid;
 }
 
 @keyframes fadeIn {

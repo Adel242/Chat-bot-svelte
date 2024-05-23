@@ -6,9 +6,16 @@
 
 	export let content = ''
 
+	$: {
+		if (content) {
+			content = content.replace(/\\\"/g, '"')
+		}
+	}
+
 	const marked = new Marked(
 		markedHighlight({
-			langPrefix: 'hljs language-',
+			// hljs
+			langPrefix: 'language-',
 			highlight(code, lang, info) {
 				const language = hljs.getLanguage(lang) ? lang : 'plaintext'
 				return (
@@ -38,7 +45,7 @@
 	)
 </script>
 
-<div class="markdown overflow-auto">
+<div class="markdown grid gap-3">
 	{@html marked.parse(content)}
 </div>
 
