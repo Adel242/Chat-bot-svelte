@@ -1,14 +1,22 @@
+<script lang="ts">
+	import { isModelStreaming } from '../stores/is-model-streaming-store'
+	import { loading } from '../stores/loading-store'
+	import { messages } from '../stores/messages-store'
+</script>
+
 <button
 	on:click
 	id="chat-delete"
-	class="btn btn-solid"
-	>
+	class="btn btn-solid btn-sm"
+	class:hidden={$messages.length === 0}
+	disabled={$loading || $isModelStreaming}
+>
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
 		fill="none"
 		viewBox="0 0 30 24"
 		stroke="currentColor"
-		class="h-4 shrink-0"
+		class="h-4 shrink-0 "
 	>
 		<path
 			stroke-linecap="round"

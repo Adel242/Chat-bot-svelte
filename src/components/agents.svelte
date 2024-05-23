@@ -11,37 +11,37 @@
 		if (!apiKey) {
 			toast.warning('Please enter an api key', {
 				position: 'bottom-center',
-				actionButtonStyle: 'bg-black',
+				actionButtonStyle: 'bg-black' 
 			})
 			return
-		};
+		}
 
 		const headers: HeadersInit = {
 			Authorization: `Bearer ${apiKey}`
-		};
+		}
 
 		if (orgId) headers['CodeGPT-Org-Id'] = orgId
 
 		const res = await fetch(`${BASE_API_URL}/agents`, {
 			headers
-		});
+		})
 
 		if (!res.ok) {
-			toast.error(`Failed to fetch agents`, { position: "bottom-center" })
+			toast.error(`Failed to fetch agents`, { position: 'bottom-center' })
 			return
-		};
+		}
 
 		const agentsData = await res.json()
 
 		avatarAgents.set(agentsData)
-	});
+	})
 
 	const handleChange = async () => {
 		const storage = await getChromeStorage([`${$selectedAgent}-messages`])
 		if (!storage) return
 		const storageMessages = storage['messages'] ?? []
 		messages.set(storageMessages)
-	};
+	}
 </script>
 
 <select class="select" bind:value={$selectedAgent} on:change={handleChange}>

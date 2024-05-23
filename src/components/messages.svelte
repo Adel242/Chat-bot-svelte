@@ -1,7 +1,7 @@
 <script lang="ts" src="https://cdn.tailwindcss.com ">
 	import { streamReader } from '../lib/stream-reader';
 	import type { Message } from '../types';
-	import Loader from './loader.svelte';
+	// import Loader from './loader.svelte'
 	import { BASE_API_URL } from '$lib/api';
 	import { credentials } from '../stores/credentials-store';
 	import { getChromeStorage, removeChromeStorage, setChromeStorage } from '$lib/chrome-storage';
@@ -10,31 +10,48 @@
 	import Markdown from './markdown.svelte';
 	import { avatarAgents } from '../stores/avatarAgents';
 	import { user } from '../stores/users-store';
+	import { clearMessages } from '../stores/clearChat';
+	import {loading} from '../stores/loading-store';
+	import {messages} from '../stores/messages-store';
+	import { isModelStreaming } from '../stores/is-model-streaming-store';
 
 	let chatMessages: HTMLDivElement
-	let messages: Message[] = []
-	let loading = false
+	// let messages: Message[] = []
 	let renderingMessage = false
 	let inputValue = ''
 	$: currentAgent = $avatarAgents.find((agent) => agent.id === $selectedAgent)
 	let stopGenerating = false
 	let abortController
+	let lastCleared = Date.now()
+
+	clearMessages.subscribe((value) => {
+		if (value) {
+			cleanMessages()
+			clearMessages.set(false)
+		}
+	});
+
+	const cleanMessages = async () => {
+		await removeChromeStorage(`${$selectedAgent}-messages`)
+		$messages = []
+		lastCleared = Date.now()
+	};
 
 	const scrollToBottom = () => {
 		chatMessages.scrollTop = chatMessages.scrollHeight
-	}
+	};
 
 	selectedAgent.subscribe(async () => {
 		if (!$selectedAgent) return
 		const storage = await getChromeStorage([`${$selectedAgent}-messages`])
 		if (!storage) {
-			messages = []
+			$messages = []
 			return
 		}
 		const storedMessages = storage[`${$selectedAgent}-messages`] ?? []
 
-		messages = storedMessages
-	})
+		$messages = storedMessages
+	});
 
 	const handleSubmit = async (e: SubmitEvent & { currentTarget: HTMLFormElement }) => {
 		e.preventDefault()
@@ -44,14 +61,14 @@
 			toast.warning('Please select an agent')
 			return
 		}
-		if (input.length < 3 || loading || renderingMessage) {
+		if (input.length < 3 || $loading || renderingMessage) {
 			return
 		}
 
 		e.currentTarget.reset()
 
-		messages = [
-			...messages,
+		$messages = [
+			...$messages,
 			{
 				role: 'user',
 				content: input,
@@ -59,7 +76,7 @@
 			}
 		]
 
-		loading = true
+		$loading = true
 		renderingMessage = true
 		stopGenerating = false
 		chatMessages.scrollTop = chatMessages.scrollHeight
@@ -78,38 +95,42 @@
 			body: JSON.stringify({
 				stream: true,
 				format: 'json',
-				messages,
+				messages: $messages,
 				agentId: $selectedAgent
 			})
 		})
 
 		if (!res.ok) {
 			console.error('Failed to send message')
-			messages = [
-				...messages,
+			$messages = [
+				...$messages,
 				{ role: 'assistant', content: 'Failed to send message', createdAt: Date.now() }
 			]
-			loading = false
+			$loading = false
 			renderingMessage = false
 			return
 		}
+
+		$isModelStreaming = true 
 
 		for await (const chunk of streamReader(res)) {
 			if (stopGenerating) {
 				break
 			}
-			if (messages[messages.length - 1].role !== 'assistant') {
-				messages = [...messages, { role: 'assistant', content: '', createdAt: Date.now() }]
-				loading = false
+			if ($messages[$messages.length - 1].role !== 'assistant') {
+				$messages = [...$messages, { role: 'assistant', content: '', createdAt: Date.now() }]
+				$loading = false
 				chatMessages.scrollTop = chatMessages.scrollHeight
 			}
-			messages[messages.length - 1].content += chunk
+			$messages[$messages.length - 1].content += chunk
 		}
 
-		scrollToBottom();
+		$isModelStreaming = false
+
+		scrollToBottom()
 
 		renderingMessage = false
-		await setChromeStorage({ [`${$selectedAgent}-messages`]: messages })
+		await setChromeStorage({ [`${$selectedAgent}-messages`]: $messages })
 	}
 
 	function handleKeyPress(e: any) {
@@ -122,7 +143,6 @@
 	const stopGeneration = () => {
 		stopGenerating = true
 	}
-
 </script>
 
 <div
@@ -130,7 +150,7 @@
 	bind:this={chatMessages}
 	class="chat-messages p-3 overflow-y-auto text-sm flex flex-col gap-4 max-h-[26rem]"
 >
-	{#each messages as { content, role }}
+	{#each $messages as { content, role }}
 		<section class="grid gap-4">
 			{#if role === 'assistant' && selectedAgent}
 				<div class="flex items-center gap-2">
@@ -147,8 +167,8 @@
 			<Markdown {content} />
 		</section>
 	{/each}
-	{#if loading}
-		<button class="btn btn-loading btn-outline btn-sm border w-fit">Thinking</button>
+	{#if $loading}
+		<button class="btn btn-$loading btn-outline btn-sm border w-fit">Thinking</button>
 	{/if}
 </div>
 
@@ -165,20 +185,16 @@
 		/>
 		<div class="flex flex-grow justify-between items-center gap-2">
 			<div>
-				{#if renderingMessage && !loading}
-					<button
-						type="button"
-						class="btn btn-error btn-sm"
-						on:click={stopGeneration}
-					>
+				{#if renderingMessage && !$loading}
+					<button type="button" class="btn btn-error btn-sm" on:click={stopGeneration}>
 						Stop
 					</button>
 				{:else}
 					<button
-						id='sendButton'
+						id="sendButton"
 						type="submit"
 						class="btn btn-primary"
-						disabled={loading || inputValue.trim().length < 1}
+						disabled={$loading || inputValue.trim().length < 1}
 						style="cursor: pointer;"
 					>
 						Send

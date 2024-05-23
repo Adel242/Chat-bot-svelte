@@ -1,24 +1,20 @@
 <script lang="ts">
-	import Agents from '../components/agents.svelte'
-	import CleanChat from '../components/clean-chat.svelte'
+	import Agents from '../components/agents.svelte';
+	import CleanChat from '../components/clean-chat.svelte';
 	import Messages from '../components/messages.svelte';
-	import { removeChromeStorage, getChromeStorage } from '$lib/chrome-storage'
-	import { selectedAgent } from '../stores/agent-store'
-	// import { credentials } from '../stores/credentials-store';
+	// import { removeChromeStorage, getChromeStorage } from '$lib/chrome-storage'
+	// import { selectedAgent } from '../stores/agent-store'
+	import { clearMessages } from '../stores/clearChat';
 
-	const cleanMessages = async () => {
-		let messages = []
-		await removeChromeStorage(`${$selectedAgent}-messages`)
+	function handleClearMessages() {
+		clearMessages.set(true)
 	}
-
 </script>
+
 <main class="grid grid-rows-[auto_1fr_auto] grid-cols-1 h-full p-2">
-	<div id='chat-header' class="w-full flex gap-2 justify-between">
+	<div id="chat-header" class="w-full flex gap-2 justify-between items-center">
 		<Agents />
-		<CleanChat on:click={cleanMessages} />
-		<!-- {#if messages.length && !loading}
-			<CleanChat on:click={cleanMessages} />
-		{/if} -->
+		<CleanChat on:click={handleClearMessages} />
 	</div>
 	<!-- <Agents /> -->
 	<Messages />

@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import { onMount } from 'svelte';
-	import { credentials } from '../../stores/credentials-store';
-	import { toast } from 'svelte-sonner';
-	import { getChromeStorage, setChromeStorage } from '$lib/chrome-storage';
+	import { goto } from '$app/navigation'
+	import { onMount } from 'svelte'
+	import { credentials } from '../../stores/credentials-store'
+	import { toast } from 'svelte-sonner'
+	import { getChromeStorage, setChromeStorage } from '$lib/chrome-storage'
+	import { BASE_API_URL } from '@/lib/api'
 
 	onMount(async () => {
 		const storage = await getChromeStorage(['apiKey', 'orgId'])
@@ -25,9 +26,23 @@
 			return
 		}
 
+		const res = await fetch(`${BASE_API_URL}/apikeys/${apiKey}`)
+		if (!res.ok) {
+			toast.error('invalid Api Key')
+			return
+		}
+		const data = await res.json()
+		console.log(data)
+
 		credentials.set({ apiKey, orgId })
 		await setChromeStorage({ apiKey, orgId })
 		goto('/')
+	}
+
+	const handleSignOut = async () => {
+		credentials.set({ apiKey: '', orgId: '' })                                                     
+		await setChromeStorage({ apikey: '', orgId: '' })
+		goto('/settings')
 	}
 </script>
 
@@ -66,6 +81,7 @@
 					</div>
 					<div class="card-footer">
 						<button type="submit" class="btn btn-primary btn-sm">Sign In</button>
+						<button type="button" class="btn btn-secondary btn-sm" on:click={handleSignOut}>Sign out</button>
 					</div>
 				</div>
 			</form>

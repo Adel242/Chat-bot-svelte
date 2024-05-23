@@ -7,6 +7,7 @@
 	import { getChromeStorage } from '$lib/chrome-storage';
 	import { fetchUserData } from '../services/users';
 	import { user } from '../stores/users-store';
+	import { goto } from '$app/navigation'
 
 	credentials.subscribe(async ({ apiKey }) => {
 		if (!apiKey) {
@@ -30,6 +31,12 @@
 		const orgId = storage['orgId'] ?? ''
 
 		credentials.set({ apiKey, orgId })
+
+		if (apiKey || orgId) {
+			goto('/')
+		} else {
+			goto('/settings')
+		};
 
 		if (!apiKey) return
 		const userData = await fetchUserData(apiKey)
