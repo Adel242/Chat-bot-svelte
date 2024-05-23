@@ -1,19 +1,19 @@
 <script lang="ts" src="https://cdn.tailwindcss.com ">
-	import { streamReader } from '../lib/stream-reader';
-	import type { Message } from '../types';
+	import { streamReader } from '../lib/stream-reader'
+	import type { Message } from '../types'
 	// import Loader from './loader.svelte'
-	import { BASE_API_URL } from '$lib/api';
-	import { credentials } from '../stores/credentials-store';
-	import { getChromeStorage, removeChromeStorage, setChromeStorage } from '$lib/chrome-storage';
-	import { selectedAgent } from '../stores/agent-store';
-	import { toast } from 'svelte-sonner';
-	import Markdown from './markdown.svelte';
-	import { avatarAgents } from '../stores/avatarAgents';
-	import { user } from '../stores/users-store';
-	import { clearMessages } from '../stores/clearChat';
-	import {loading} from '../stores/loading-store';
-	import {messages} from '../stores/messages-store';
-	import { isModelStreaming } from '../stores/is-model-streaming-store';
+	import { BASE_API_URL } from '$lib/api'
+	import { credentials } from '../stores/credentials-store'
+	import { getChromeStorage, removeChromeStorage, setChromeStorage } from '$lib/chrome-storage'
+	import { selectedAgent } from '../stores/agent-store'
+	import { toast } from 'svelte-sonner'
+	import Markdown from './markdown.svelte'
+	import { avatarAgents } from '../stores/avatarAgents'
+	import { user } from '../stores/users-store'
+	import { clearMessages } from '../stores/clearChat'
+	import { loading } from '../stores/loading-store'
+	import { messages } from '../stores/messages-store'
+	import { isModelStreaming } from '../stores/is-model-streaming-store'
 
 	let chatMessages: HTMLDivElement
 	// let messages: Message[] = []
@@ -29,17 +29,17 @@
 			cleanMessages()
 			clearMessages.set(false)
 		}
-	});
+	})
 
 	const cleanMessages = async () => {
 		await removeChromeStorage(`${$selectedAgent}-messages`)
 		$messages = []
 		lastCleared = Date.now()
-	};
+	}
 
 	const scrollToBottom = () => {
 		chatMessages.scrollTop = chatMessages.scrollHeight
-	};
+	}
 
 	selectedAgent.subscribe(async () => {
 		if (!$selectedAgent) return
@@ -51,7 +51,7 @@
 		const storedMessages = storage[`${$selectedAgent}-messages`] ?? []
 
 		$messages = storedMessages
-	});
+	})
 
 	const handleSubmit = async (e: SubmitEvent & { currentTarget: HTMLFormElement }) => {
 		e.preventDefault()
@@ -111,7 +111,7 @@
 			return
 		}
 
-		$isModelStreaming = true 
+		$isModelStreaming = true
 
 		for await (const chunk of streamReader(res)) {
 			if (stopGenerating) {
@@ -168,7 +168,7 @@
 		</section>
 	{/each}
 	{#if $loading}
-		<button class="btn btn-$loading btn-outline btn-sm border w-fit">Thinking</button>
+		<button class="btn btn-loading btn-outline btn-xs border w-fit">Thinking</button>
 	{/if}
 </div>
 
@@ -176,31 +176,26 @@
 	<form on:submit|preventDefault={handleSubmit} class="w-full flex gap-2">
 		<textarea
 			name="input"
-			class="textarea resize-none text-sm textarea-block"
-			cols="100"
+			class="min-h-10 max-h-40 textarea textarea-solid resize-none text-sm textarea-block"
 			rows="1"
 			placeholder="Type your message..."
 			bind:value={inputValue}
 			on:keypress={handleKeyPress}
 		/>
-		<div class="flex flex-grow justify-between items-center gap-2">
-			<div>
-				{#if renderingMessage && !$loading}
-					<button type="button" class="btn btn-error btn-sm" on:click={stopGeneration}>
-						Stop
-					</button>
-				{:else}
-					<button
-						id="sendButton"
-						type="submit"
-						class="btn btn-primary"
-						disabled={$loading || inputValue.trim().length < 1}
-						style="cursor: pointer;"
-					>
-						Send
-					</button>
-				{/if}
-			</div>
-		</div>
+
+		{#if renderingMessage && !$loading}
+			<button type="button" class="mt-auto btn btn-error btn-sm" on:click={stopGeneration}>
+				Stop
+			</button>
+		{:else}
+			<button
+				id="sendButton"
+				type="submit"
+				class="mt-auto btn btn-primary btn-sm border-2"
+				disabled={$loading || inputValue.trim().length < 1}
+			>
+				Send
+			</button>
+		{/if}
 	</form>
 </footer>
