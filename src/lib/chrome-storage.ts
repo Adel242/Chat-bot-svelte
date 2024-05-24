@@ -24,10 +24,11 @@ export async function setChromeStorage(items: Record<string, any>) {
 
 export async function removeChromeStorage(keys: string[] | string) {
 	if (!chrome.storage) return
-
 	try {
 		await chrome.storage.local.remove(keys)
 	} catch (error) {
 		console.error(error)
 	}
 }
+
+

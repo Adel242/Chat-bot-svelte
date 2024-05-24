@@ -3,8 +3,11 @@
 	import { onMount } from 'svelte'
 	import { credentials } from '../../stores/credentials-store'
 	import { toast } from 'svelte-sonner'
-	import { getChromeStorage, setChromeStorage } from '$lib/chrome-storage'
+	import { getChromeStorage, setChromeStorage, removeChromeStorage } from '$lib/chrome-storage'
 	import { BASE_API_URL } from '@/lib/api'
+	import { messages } from '../../stores/messages-store'
+	import { clearMessages } from '../../stores/clearChat'
+	import { selectedAgent } from '../../stores/agent-store'
 
 	onMount(async () => {
 		const storage = await getChromeStorage(['apiKey', 'orgId'])
@@ -32,18 +35,19 @@
 			return
 		}
 		const data = await res.json()
-		console.log(data)
+		// console.log(data)
 
 		credentials.set({ apiKey, orgId })
 		await setChromeStorage({ apiKey, orgId })
 		goto('/')
-	}
+	};
 
 	const handleSignOut = async () => {
-		credentials.set({ apiKey: '', orgId: '' })                                                     
-		await setChromeStorage({ apiKey: '', orgId: '' })
-		goto('/settings')
-	}
+		credentials.set({ apiKey: '', orgId: '' })
+		await removeChromeStorage(['apiKey', 'orgId'])
+		await chrome.storage.local.clear(); 
+	};
+
 </script>
 
 <main class="flex flex-col h-full items-center justify-center">
@@ -81,7 +85,13 @@
 					</div>
 					<div class="card-footer">
 						<button type="submit" class="btn btn-primary btn-sm">Sign In</button>
-						<button type="button" class="btn btn-secondary btn-sm" on:click={handleSignOut}>Sign out</button>
+						{#if $credentials.apiKey}
+							<button
+								type="button"
+								class="btn btn-outline-secondary btn-sm"
+								on:click={handleSignOut}>Sign out</button
+							>
+						{/if}
 					</div>
 				</div>
 			</form>

@@ -31,10 +31,13 @@
 			toast.error(`Failed to fetch agents`, { position: 'bottom-center' })
 			return
 		}
-
 		const agentsData = await res.json()
 
 		avatarAgents.set(agentsData)
+
+		if (agentsData.length > 0) {
+			selectedAgent.set(agentsData[0].id)
+		} // selecciona el primer agente de la lista por defecto
 	})
 
 	onMount(async () => {
@@ -56,7 +59,7 @@
 </script>
 
 <select class="select" bind:value={$selectedAgent}>
-	<option value="" disabled selected>Select an agent</option>
+	<!-- <option value={$selectedAgent} disabled selected></option> -->
 	{#each $avatarAgents as { id, name } (id)}
 		<option value={id}>{name}</option>
 	{/each}
