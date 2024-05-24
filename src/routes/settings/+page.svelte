@@ -41,7 +41,7 @@
 
 	const handleSignOut = async () => {
 		credentials.set({ apiKey: '', orgId: '' })                                                     
-		await setChromeStorage({ apikey: '', orgId: '' })
+		await setChromeStorage({ apiKey: '', orgId: '' })
 		goto('/settings')
 	}
 </script>

@@ -3,9 +3,10 @@
 	import { credentials } from '../stores/credentials-store';
 	import { toast } from 'svelte-sonner';
 	import { selectedAgent } from '../stores/agent-store';
-	import { getChromeStorage } from '$lib/chrome-storage';
+	import { getChromeStorage, setChromeStorage } from '$lib/chrome-storage';
 	import { messages } from '../stores/messages-store';
 	import { avatarAgents } from '../stores/avatarAgents';
+	import { onMount } from 'svelte'
 
 	credentials.subscribe(async ({ apiKey, orgId }) => {
 		if (!apiKey) {
@@ -36,15 +37,25 @@
 		avatarAgents.set(agentsData)
 	})
 
-	const handleChange = async () => {
-		const storage = await getChromeStorage([`${$selectedAgent}-messages`])
-		if (!storage) return
-		const storageMessages = storage['messages'] ?? []
-		messages.set(storageMessages)
-	}
+	onMount(async () => {
+		if (typeof chrome !== 'undefined' && chrome.storage) { // mejorar esto, si preguntan, un mago lo hizo.
+			const storage = await getChromeStorage(['selectedAgent']);
+			const storedAgent = storage ? storage['selectedAgent'] : null;
+			if (storedAgent) {
+				selectedAgent.set(storedAgent);
+			}
+		}
+	});
+
+	selectedAgent.subscribe(async (agentId) => {
+		if (typeof chrome !== 'undefined' && chrome.storage && agentId) {
+			await setChromeStorage({ 'selectedAgent': agentId });
+		}
+	});
+
 </script>
 
-<select class="select" bind:value={$selectedAgent} on:change={handleChange}>
+<select class="select" bind:value={$selectedAgent}>
 	<option value="" disabled selected>Select an agent</option>
 	{#each $avatarAgents as { id, name } (id)}
 		<option value={id}>{name}</option>

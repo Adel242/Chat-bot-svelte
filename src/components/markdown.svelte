@@ -48,4 +48,3 @@
 <div class="markdown grid gap-3">
 	{@html marked.parse(content)}
 </div>
-
