@@ -20,9 +20,9 @@
 </script>
 
 <header class="flex gap-2 items-center justify-between p-3 border-b-neutral/30 border-b">
-	<a href="/">
+	<!-- <a href="/"> -->
 		<LogotypeWide currentColor='white' class='h-3'/>
-	</a>
+	<!-- </a> -->
 	<nav class="flex items-center justify-between gap-4">
 		{#each links as { url, label, auth } (url)}
 			<a class:hidden={auth && !$credentials.apiKey}
