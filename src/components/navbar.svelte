@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import LogotypeWide from './LogotypeWide.svelte';
 	import {credentials} from '@/stores/credentials-store';
-
+	import { avatarAgents } from '../stores/avatarAgents'
 
 	const links = [
 		{
