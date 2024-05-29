@@ -1,20 +1,21 @@
 <script lang="ts">
-	import { BASE_API_URL } from '$lib/api'
-	import { credentials } from '../stores/credentials-store'
-	import { toast } from 'svelte-sonner'
-	import { selectedAgent } from '../stores/agent-store'
-	import { getChromeStorage, setChromeStorage } from '$lib/chrome-storage'
-	import { messages } from '../stores/messages-store'
-	import { avatarAgents } from '../stores/avatarAgents'
-	import { onMount } from 'svelte'
+	import { BASE_API_URL } from '$lib/api';
+	import { credentials } from '../stores/credentials-store';
+	import { toast } from 'svelte-sonner';
+	import { selectedAgent } from '../stores/agent-store';
+	import { getChromeStorage, setChromeStorage } from '$lib/chrome-storage';
+	import { messages } from '../stores/messages-store';
+	import { avatarAgents } from '../stores/avatarAgents';
+	import { onMount } from 'svelte';
 
 	credentials.subscribe(async ({ apiKey, orgId }) => {
 		if (!apiKey) {
+			selectedAgent.set(null);
 			// toast.warning('Please enter an api key', {
 			// 	position: 'bottom-center',
 			// 	actionButtonStyle: 'bg-black'
 			// })
-			return
+			return;
 		}
 
 		const headers: HeadersInit = {
@@ -32,30 +33,21 @@
 			return
 		}
 		const agentsData = await res.json()
-
 		avatarAgents.set(agentsData)
 
-		if (agentsData.length > 0) {
-			selectedAgent.set(agentsData[0].id)
-		} // selecciona el primer agente de la lista por defecto
-	})
+		const storage = await getChromeStorage(['lastSelectedAgent']);
+        const lastSelectedAgent = storage ? storage['lastSelectedAgent'] : null;
 
-	onMount(async () => {
-		if (typeof chrome !== 'undefined' && chrome.storage) {
-			// mejorar esto, si preguntan, un mago lo hizo.
-			const storage = await getChromeStorage(['selectedAgent'])
-			const storedAgent = storage ? storage['selectedAgent'] : null
-			if (storedAgent) {
-				selectedAgent.set(storedAgent)
-			}
-		}
-	})
+        const defaultAgent = agentsData.length > 0 ? agentsData[0].id : null;
+        selectedAgent.set(lastSelectedAgent || defaultAgent);
+	});
 
 	selectedAgent.subscribe(async (agentId) => {
-		if (typeof chrome !== 'undefined' && chrome.storage && agentId) {
-			await setChromeStorage({ selectedAgent: agentId })
-		}
-	})
+        if (agentId) {
+            await setChromeStorage({ lastSelectedAgent: agentId });
+        }
+    });
+
 </script>
 
 <select class="select" bind:value={$selectedAgent}>

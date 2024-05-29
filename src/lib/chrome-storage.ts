@@ -12,9 +12,7 @@ export async function getChromeStorage(keys: string[]) {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function setChromeStorage(items: Record<string, any>) {
-	console.log(items,'items 1')
 	if (!chrome.storage) return
-	console.log(items, 'items 2')
 	try {
 		await chrome.storage.local.set(items)
 	} catch (err) {
