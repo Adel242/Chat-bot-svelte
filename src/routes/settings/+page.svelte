@@ -39,11 +39,11 @@
 		goto('/')
 	};
 
-	const handleSignOut = async () => {
-		credentials.set({ apiKey: '', orgId: '' })
-		await removeChromeStorage(['apiKey', 'orgId'])
-		await chrome.storage.local.clear(); 
-	};
+	// const handleSignOut = async () => {
+	// 	credentials.set({ apiKey: '', orgId: '' })
+	// 	await removeChromeStorage(['apiKey', 'orgId'])
+	// 	await chrome.storage.local.clear(); 
+	// };
 
 </script>
 
@@ -82,13 +82,13 @@
 					</div>
 					<div class="card-footer">
 						<button type="submit" class="btn btn-primary btn-sm">Sign In</button>
-						{#if $credentials.apiKey}
+						<!-- {#if $credentials.apiKey}
 							<button
 								type="button"
 								class="btn btn-outline-secondary btn-sm"
 								on:click={handleSignOut}>Sign out</button
 							>
-						{/if}
+						{/if} -->
 					</div>
 				</div>
 			</form>

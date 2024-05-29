@@ -186,14 +186,14 @@
 		/>
 
 		{#if renderingMessage && !$loading}
-			<button type="button" class="mt-auto btn btn-error btn-sm" on:click={stopGeneration}>
+			<button type="button" class="mt-auto btn btn-error btn-sm h-[auto]" on:click={stopGeneration}>
 				Stop
 			</button>
 		{:else}
 			<button
 				id="sendButton"
 				type="submit"
-				class="mt-auto btn btn-primary btn-sm border-2"
+				class="btn btn-primary btn-sm border-2 h-[auto]"
 				disabled={$loading || inputValue.trim().length < 1}
 			>
 				Send
