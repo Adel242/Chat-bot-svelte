@@ -1,10 +1,8 @@
 <script lang="ts">
-	import Agents from '../components/agents.svelte';
-	import CleanChat from '../components/clean-chat.svelte';
-	import Messages from '../components/messages.svelte';
-	// import { removeChromeStorage, getChromeStorage } from '$lib/chrome-storage'
-	// import { selectedAgent } from '../stores/agent-store'
-	import { clearMessages } from '../stores/clearChat';
+	import Agents from '../components/agents.svelte'
+	import CleanChat from '../components/clean-chat.svelte'
+	import Messages from '../components/messages.svelte'
+	import { clearMessages } from '../stores/clearChat'
 
 	function handleClearMessages() {
 		clearMessages.set(true)
@@ -16,6 +14,5 @@
 		<Agents />
 		<CleanChat on:click={handleClearMessages} />
 	</div>
-	<!-- <Agents /> -->
 	<Messages />
 </main>
