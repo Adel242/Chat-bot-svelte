@@ -14,7 +14,6 @@
 
 	const marked = new Marked(
 		markedHighlight({
-			// hljs
 			langPrefix: 'language-',
 			highlight(code, lang, info) {
 				const language = hljs.getLanguage(lang) ? lang : 'plaintext'
@@ -37,7 +36,7 @@
 								<path d="M14 4l-4 16" />
 							</svg>
 						</div>
-						<div <class="item-center">${language}</div>
+						<span <class="item-center">${language}</span>
 					</div>` + hljs.highlight(code, { language }).value
 				)
 			}
@@ -45,6 +44,6 @@
 	)
 </script>
 
-<div class="markdown grid gap-3">
+<div class="highlight-content markdown grid gap-3">
 	{@html marked.parse(content)}
 </div>

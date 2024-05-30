@@ -45,15 +45,17 @@ body {
 
 /* code blocks ↓ */
 
-/* .language {
+.language {
 	background-color: rgb(39 39 42);
 	border-radius: 0.5rem;
 	padding: 0.2rem;
+	margin-bottom: 1rem;
+	min-width: 21rem;
 	max-width: auto;
 	border: solid 0.1rem rgb(63 63 70);
 	display: flex;
 	align-items: center;
-} */
+}
 
 /* .language .languaje-icon {
 	padding: 10px;
@@ -63,7 +65,7 @@ body {
 
 /* background-color: rgb(9, 9, 11, 0.6); */
 /* overflow-x: auto;  */
-/* .markdown code {
+.markdown code {
 	color: #ffffff;
 	border-radius: 0.5rem 0.5rem 0 0;
 	font-family: 'Courier New', Courier, monospace;
@@ -72,9 +74,9 @@ body {
 	line-height: 1.4;
 	border: solid 1 px #3f3f46;
 	margin: 0.5rem 0 0.5rem 0;
-} */
+}
 
-/* .markdown pre {
+.markdown pre {
 	background-color: rgb(0, 0, 0);
 	color: #c5c9c6; 
 	border-radius: 0 0 0.5rem 0.5rem;
@@ -99,7 +101,7 @@ body {
 .p {
 	margin: 1rem 0;
 	color: rgb(222, 53, 53)
-} */
+}
 
 /* tables ↓ */
 .markdown table {
@@ -165,9 +167,9 @@ body {
 	border-right-width: 1px;
 }
 
-.markdown code {
+/* .markdown code {
 	display: grid;
-}
+} */
 
 @keyframes fadeIn {
 	from {
@@ -178,8 +180,8 @@ body {
 	}
 }
 
-.fadeIn {
+/* .fadeIn {
 	animation-name: fadeIn;
 	animation-timing-function: linear;
 	animation-fill-mode: forwards;
-}
+} */
