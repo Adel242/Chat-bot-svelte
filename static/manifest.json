@@ -15,8 +15,12 @@
 	},
 	"permissions": [
 		"storage",
-		"tabs"
+		"tabs",
+		"sidePanel"
 	],
+	"side_panel": {
+        "default_path": "index.html"
+    },
 	"background": {
     	"service_worker": "background.js"
     }, 	
