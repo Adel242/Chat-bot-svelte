@@ -146,7 +146,7 @@
 <div
 	id="chat-messages"
 	bind:this={chatMessages}
-	class="chat-messages p-3 overflow-y-auto text-sm flex flex-col gap-4 max-h-[26rem]"
+	class="chat-messages p-3 overflow-y-auto text-sm flex flex-col gap-4 max-h-[calc(100vh-10rem)]"
 >
 	{#each $messages as { content, role }}
 		<section class="grid gap-4">

@@ -1,7 +1,7 @@
 {
 	"manifest_version": 3,
 	"name": "CodeGPT Extension",
-	"version": "0.1.03",
+	"version": "0.1.04",
 	"description": "CodeGPT extension",
 	"action": {
 		"default_title": "CodeGPT Extension",
@@ -15,9 +15,7 @@
 	},
 	"permissions": [
 		"storage",
-		"tabs",
-		"sidePanel",
-		"activeTab"
+		"sidePanel"
 	],
 	"side_panel": {
 		"default_path": "index.html"
@@ -27,10 +25,6 @@
 	},
 	"content_scripts": [
 		{
-			"matches": [
-				"http://*/*",
-				"https://*/*"
-			],
 			"js": [
 				"content.js"
 			]
