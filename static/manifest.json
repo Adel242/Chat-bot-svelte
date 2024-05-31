@@ -14,6 +14,23 @@
 		"128": "favicon-128.png"
 	},
 	"permissions": [
-		"storage"
-	]
+		"storage",
+		"tabs"
+	],
+	"background": {
+    	"service_worker": "background.js"
+    }, 	
+	"content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "css": ["content.css"],
+            "js": ["content.js"]
+        }
+    ],
+	 "web_accessible_resources": [
+        {
+            "resources": ["content.css"],
+            "matches": ["<all_urls>"]
+        }
+    ]
 }
