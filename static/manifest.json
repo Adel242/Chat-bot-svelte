@@ -16,25 +16,24 @@
 	"permissions": [
 		"storage",
 		"tabs",
-		"sidePanel"
+		"sidePanel",
+		"activeTab"
 	],
 	"side_panel": {
-        "default_path": "index.html"
-    },
+		"default_path": "index.html"
+	},
 	"background": {
-    	"service_worker": "background.js"
-    }, 	
+		"service_worker": "background.js"
+	},
 	"content_scripts": [
-        {
-            "matches": ["<all_urls>"],
-            "css": ["content.css"],
-            "js": ["content.js"]
-        }
-    ],
-	 "web_accessible_resources": [
-        {
-            "resources": ["content.css"],
-            "matches": ["<all_urls>"]
-        }
-    ]
+		{
+			"matches": [
+				"http://*/*",
+				"https://*/*"
+			],
+			"js": [
+				"content.js"
+			]
+		}
+	]
 }

@@ -1,16 +1,8 @@
-// chrome.runtime.onInstalled.addListener((tab) => {
-//     console.log('hola background')
-//     chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-//         console.log(tabs[0])
-//       })
-//     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-//         const activeTab = tabs[0];
-//         chrome.tabs.sendMessage(activeTab.id, { "message": "clicked_browser_action" });
-//     });
-// });
-
-// console.log('hello background afuera')
-
 chrome.sidePanel
     .setPanelBehavior({ openPanelOnActionClick: true })
     .catch((error) => console.error(error))
+
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+    console.log('Content from the web page: ', request.content)
+    // Process the content as needed, perhaps send it to the sidePanel for display
+})
