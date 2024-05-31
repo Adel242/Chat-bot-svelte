@@ -1,7 +1,6 @@
 <script lang="ts" src="https://cdn.tailwindcss.com ">
 	import { streamReader } from '../lib/stream-reader'
 	import type { Message } from '../types'
-	// import Loader from './loader.svelte'
 	import { BASE_API_URL } from '$lib/api'
 	import { credentials } from '../stores/credentials-store'
 	import { getChromeStorage, removeChromeStorage, setChromeStorage } from '$lib/chrome-storage'
@@ -16,7 +15,6 @@
 	import { isModelStreaming } from '../stores/is-model-streaming-store'
 
 	let chatMessages: HTMLDivElement
-	// let messages: Message[] = []
 	let renderingMessage = false
 	let inputValue = ''
 	$: currentAgent = $avatarAgents.find((agent) => agent.id === $selectedAgent)
@@ -193,7 +191,7 @@
 			<button
 				id="sendButton"
 				type="submit"
-				class="mt-auto btn btn-primary btn-sm border-2"
+				class="btn btn-primary btn-sm border-2"
 				disabled={$loading || inputValue.trim().length < 1}
 			>
 				Send
