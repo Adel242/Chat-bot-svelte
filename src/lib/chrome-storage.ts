@@ -1,32 +1,66 @@
 export async function getChromeStorage(keys: string[]) {
-	if (!chrome.storage) return null
+	if (!chrome.storage) {
+		const storage: Record<string, unknown> = {}
 
-	try {
-		const storage = await chrome.storage.local.get(keys)
+		for (const key of keys) {
+			const item = localStorage.getItem(key)
+
+			if (!item) continue
+
+			try {
+				const data = JSON.parse(item)
+				storage[key] = data
+			} catch (error) {
+				continue
+			}
+		}
+
+		if (Object.keys(storage).length === 0) return null
+
 		return storage
-	} catch (err) {
-		console.error(err)
-		return null
+	} else {
+		try {
+			const storage = await chrome.storage.local.get(keys)
+			return storage
+		} catch (err) {
+			console.error(err)
+			return null
+		}
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function setChromeStorage(items: Record<string, any>) {
-	if (!chrome.storage) return
-	try {
-		await chrome.storage.local.set(items)
-	} catch (err) {
-		console.error(err)
+export async function setChromeStorage(items: Record<string, unknown>) {
+	if (Object.keys(items).length === 0) return
+
+	if (!chrome.storage) {
+		for (const key in items) {
+			const item = items[key]
+
+			if (!item) continue
+
+			localStorage.setItem(key, JSON.stringify(item))
+		}
+	} else {
+		try {
+			await chrome.storage.local.set(items)
+		} catch (err) {
+			console.error(err)
+		}
 	}
 }
 
 export async function removeChromeStorage(keys: string[] | string) {
-	if (!chrome.storage) return
-	try {
-		await chrome.storage.local.remove(keys)
-	} catch (error) {
-		console.error(error)
+	if (Object.keys(keys).length === 0) return
+
+	if (!chrome.storage) {
+		for (const key of keys) {
+			localStorage.removeItem(key)
+		}
+	} else {
+		try {
+			await chrome.storage.local.remove(keys)
+		} catch (error) {
+			console.error(error)
+		}
 	}
 }
-
-

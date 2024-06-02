@@ -1,26 +1,24 @@
-<script lang="ts" src="https://cdn.tailwindcss.com ">
+<script lang="ts">
 	import { streamReader } from '../lib/stream-reader'
-	import type { Message } from '../types'
 	import { BASE_API_URL } from '$lib/api'
 	import { credentials } from '../stores/credentials-store'
 	import { getChromeStorage, removeChromeStorage, setChromeStorage } from '$lib/chrome-storage'
 	import { selectedAgent } from '../stores/agent-store'
 	import { toast } from 'svelte-sonner'
 	import Markdown from './markdown.svelte'
-	import { avatarAgents } from '../stores/avatarAgents'
 	import { user } from '../stores/users-store'
 	import { clearMessages } from '../stores/clearChat'
 	import { loading } from '../stores/loading-store'
 	import { messages } from '../stores/messages-store'
 	import { isModelStreaming } from '../stores/is-model-streaming-store'
+	import Sparkles from './icons/sparkles.svelte'
 
 	let chatMessages: HTMLDivElement
 	let renderingMessage = false
 	let inputValue = ''
-	$: currentAgent = $avatarAgents.find((agent) => agent.id === $selectedAgent)
 	let stopGenerating = false
 	let abortController
-	let lastCleared = Date.now()
+	// let lastCleared = Date.now()
 
 	clearMessages.subscribe((value) => {
 		if (value) {
@@ -30,9 +28,9 @@
 	})
 
 	const cleanMessages = async () => {
-		await removeChromeStorage(`${$selectedAgent}-messages`)
+		await removeChromeStorage(`${$selectedAgent?.id}-messages`)
 		$messages = []
-		lastCleared = Date.now()
+		// lastCleared = Date.now()
 	}
 
 	const scrollToBottom = () => {
@@ -41,12 +39,12 @@
 
 	selectedAgent.subscribe(async () => {
 		if (!$selectedAgent) return
-		const storage = await getChromeStorage([`${$selectedAgent}-messages`])
+		const storage = await getChromeStorage([`${$selectedAgent.id}-messages`])
 		if (!storage) {
 			$messages = []
 			return
 		}
-		const storedMessages = storage[`${$selectedAgent}-messages`] ?? []
+		const storedMessages = storage[`${$selectedAgent.id}-messages`] ?? []
 
 		$messages = storedMessages
 	})
@@ -80,7 +78,7 @@
 		chatMessages.scrollTop = chatMessages.scrollHeight
 		abortController = new AbortController()
 
-		const headers: HeadersInit = {
+		const headers: Record<string, string> = {
 			Authorization: `Bearer ${$credentials.apiKey}`,
 			'Content-Type': 'application/json'
 		}
@@ -88,13 +86,14 @@
 		if ($credentials.orgId) headers['CodeGPT-Org-Id'] = $credentials.orgId
 
 		const res = await fetch(`${BASE_API_URL}/chat/completions`, {
+			signal: abortController.signal,
 			method: 'POST',
 			headers,
 			body: JSON.stringify({
 				stream: true,
 				format: 'json',
 				messages: $messages,
-				agentId: $selectedAgent
+				agentId: $selectedAgent.id
 			})
 		})
 
@@ -128,10 +127,14 @@
 		scrollToBottom()
 
 		renderingMessage = false
-		await setChromeStorage({ [`${$selectedAgent}-messages`]: $messages })
+		await setChromeStorage({ [`${$selectedAgent.id}-messages`]: $messages })
 	}
 
-	function handleKeyPress(e: any) {
+	function handleKeyPress(
+		e: KeyboardEvent & {
+			currentTarget: EventTarget & HTMLTextAreaElement
+		}
+	) {
 		if (e.key === 'Enter' && !e.shiftKey) {
 			e.preventDefault()
 			document.getElementById('sendButton')?.click()
@@ -152,13 +155,29 @@
 		<section class="grid gap-4">
 			{#if role === 'assistant' && selectedAgent}
 				<div class="flex items-center gap-2">
-					<img src={currentAgent?.image} alt="Agent" class="w-6 h-6 rounded-full" />
-					<div>{currentAgent?.name}</div>
+					{#if $selectedAgent?.image}
+						<img
+							src={$selectedAgent?.image}
+							alt="Agent"
+							class="w-6 h-6 rounded-full object-cover"
+						/>
+					{:else}
+						<div
+							class="bg-white text-black rounded-full w-6 h-6 p-1 flex items-center justify-center"
+						>
+							<Sparkles class="w-full h-auto" />
+						</div>
+					{/if}
+					<div>{$selectedAgent?.name}</div>
 				</div>
 			{/if}
 			{#if role === 'user'}
 				<div class="flex items-center gap-2">
-					<img src={$user?.avatar_url} alt={$user?.full_name} class="w-6 h-6 rounded-full" />
+					<img
+						src={$user?.avatar_url}
+						alt={$user?.full_name}
+						class="w-6 h-6 rounded-full object-cover"
+					/>
 					<div>{$user?.full_name}</div>
 				</div>
 			{/if}
