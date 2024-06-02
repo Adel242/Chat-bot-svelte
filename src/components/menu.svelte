@@ -5,7 +5,6 @@
 	import { credentials } from '../stores/credentials-store'
 	import { toast } from 'svelte-sonner'
 	import { goto } from '$app/navigation'
-	import { loading } from '../stores/loading-store'
 
 	export let apiKey
 
@@ -29,7 +28,11 @@
 		>
 			<div class="flex items-center gap-2 w-8 h-8 rounded-full">
 				{#if $user?.avatar_url}
-					<img src={$user?.avatar_url} alt="user avatar" class="w-8 h-8 rounded-full" />
+					<img
+						src={$user?.avatar_url}
+						alt="user avatar"
+						class="w-8 h-8 rounded-full object-cover"
+					/>
 				{/if}
 			</div>
 		</button>

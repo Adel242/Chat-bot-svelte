@@ -8,14 +8,14 @@
 
 	$: {
 		if (content) {
-			content = content.replace(/\\\"/g, '"')
+			content = content.replace(/\\"/g, '"')
 		}
 	}
 
 	const marked = new Marked(
 		markedHighlight({
 			langPrefix: 'language-',
-			highlight(code, lang, info) {
+			highlight(code, lang) {
 				const language = hljs.getLanguage(lang) ? lang : 'plaintext'
 				return (
 					`<div class="language flex items-center">

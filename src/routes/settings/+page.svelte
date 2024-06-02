@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte'
 	import { credentials } from '../../stores/credentials-store'
 	import { toast } from 'svelte-sonner'
-	import { getChromeStorage, setChromeStorage, removeChromeStorage } from '$lib/chrome-storage'
+	import { getChromeStorage, setChromeStorage } from '$lib/chrome-storage'
 	import { BASE_API_URL } from '@/lib/api'
 
 	onMount(async () => {
@@ -31,13 +31,11 @@
 			toast.error('invalid Api Key')
 			return
 		}
-		const data = await res.json()
 
 		credentials.set({ apiKey, orgId })
 		await setChromeStorage({ apiKey, orgId })
 		goto('/')
 	}
-
 </script>
 
 <main class="flex flex-col h-full items-center justify-center">
@@ -62,7 +60,7 @@
 							<small class="text-xs text-gray-500"></small>
 						</div>
 						<div class="w-full grid gap-2">
-							<label for="orgId" class="text-xs text-gray-300">Org ID – Optional</label>
+							<label for="orgId" class="text-xs text-gray-300">Org ID – Optional</label>
 							<input
 								value={$credentials.orgId}
 								class="input max-w-full"
