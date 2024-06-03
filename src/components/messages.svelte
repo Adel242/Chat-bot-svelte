@@ -80,7 +80,8 @@
 
 		const headers: Record<string, string> = {
 			Authorization: `Bearer ${$credentials.apiKey}`,
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			'X-CodeGPT-Source': 'chrome'
 		}
 
 		if ($credentials.orgId) headers['CodeGPT-Org-Id'] = $credentials.orgId
