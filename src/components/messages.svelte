@@ -150,10 +150,10 @@
 <div
 	id="chat-messages"
 	bind:this={chatMessages}
-	class="chat-messages p-3 overflow-y-auto text-sm flex flex-col gap-4 max-h-[calc(100vh-10rem)]"
+	class="chat-messages overflow-y-auto hide-scrollbar flex flex-col gap-4 max-h-[calc(100vh-11rem)] py-3"
 >
 	{#each $messages as { content, role }}
-		<section class="grid gap-4">
+		<section class="grid gap-4 mb-6 px-2">
 			{#if role === 'assistant' && selectedAgent}
 				<div class="flex items-center gap-2">
 					{#if $selectedAgent?.image}
@@ -164,12 +164,12 @@
 						/>
 					{:else}
 						<div
-							class="bg-white text-black rounded-full w-6 h-6 p-1 flex items-center justify-center"
+							class="bg-white text-black rounded-full w-6 h-6 p-1 flex items-center justify-center dark:bg-black dark:text-foreground"
 						>
 							<Sparkles class="w-full h-auto" />
 						</div>
 					{/if}
-					<div>{$selectedAgent?.name}</div>
+					<b class="text-sm text-gray-11 tracking-wide">{$selectedAgent?.name}</b>
 				</div>
 			{/if}
 			{#if role === 'user'}
@@ -179,7 +179,7 @@
 						alt={$user?.full_name}
 						class="w-6 h-6 rounded-full object-cover"
 					/>
-					<div>{$user?.full_name}</div>
+					<b class="text-sm text-gray-11 tracking-wide">{$user?.full_name}</b>
 				</div>
 			{/if}
 			<Markdown {content} />
@@ -193,7 +193,7 @@
 </div>
 
 <footer>
-	<form on:submit|preventDefault={handleSubmit} class="w-full flex gap-2">
+	<form on:submit|preventDefault={handleSubmit} class="w-full flex gap-2 p-2">
 		<textarea
 			name="input"
 			class="min-h-10 max-h-40 textarea textarea-solid resize-none text-sm textarea-block"
