@@ -151,7 +151,7 @@
 <div
 	id="chat-messages"
 	bind:this={chatMessages}
-	class="chat-messages overflow-y-auto grid gap-4 max-h-[calc(100vh-11rem)] py-3 scroll-smooth"
+	class="chat-messages overflow-y-auto flex flex-col gap-4 max-h-[calc(100vh-11rem)] py-3 scroll-smooth"
 >
 	{#each $messages as { content, role }}
 		<section class="grid gap-4 mb-6 px-2">
