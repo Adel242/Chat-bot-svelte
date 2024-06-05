@@ -75,8 +75,8 @@
 		$loading = true
 		renderingMessage = true
 		stopGenerating = false
-		chatMessages.scrollTop = chatMessages.scrollHeight
 		abortController = new AbortController()
+		chatMessages.scrollTop = chatMessages.scrollHeight
 
 		const headers: Record<string, string> = {
 			Authorization: `Bearer ${$credentials.apiKey}`,
@@ -144,13 +144,14 @@
 
 	const stopGeneration = () => {
 		stopGenerating = true
+		scrollToBottom()
 	}
 </script>
 
 <div
 	id="chat-messages"
 	bind:this={chatMessages}
-	class="chat-messages overflow-y-auto hide-scrollbar flex flex-col gap-4 max-h-[calc(100vh-11rem)] py-3"
+	class="chat-messages overflow-y-auto grid gap-4 max-h-[calc(100vh-11rem)] py-3 scroll-smooth"
 >
 	{#each $messages as { content, role }}
 		<section class="grid gap-4 mb-6 px-2">
@@ -185,11 +186,12 @@
 			<Markdown {content} />
 		</section>
 	{/each}
-	{#if $loading}
-		<button class="btn btn-loading btn-outline btn-xs border w-fit text-gray-500 opacity-80"
-			>Thinking</button
-		>
-	{/if}
+	<!-- Loader -->
+	<section
+		class={` ${$loading ? 'opacity-100' : 'opacity-0'} grid cursor-none select-none gap-4 mb-6 px-2 h-20`}
+	>
+		<button class="btn btn-loading btn-outline border w-fit text-gray-11">Thinking</button>
+	</section>
 </div>
 
 <footer>
