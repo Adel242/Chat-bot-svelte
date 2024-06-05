@@ -4,7 +4,7 @@
 	"private": true,
 	"scripts": {
 		"dev": "vite dev",
-		"devext": "nodemon --watch src --watch static --exec \"vite build\" -e json,ts,css,html,svelte",
+		"devext": "nodemon --watch src --watch static --exec \"vite build\" -e json,ts,css,html,svelte,js",
 		"build": "vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",

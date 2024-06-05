@@ -49,7 +49,7 @@
 	})
 </script>
 
-<div class="h-dvh w-dvw min-h-[36rem] grid grid-rows-[auto_1fr] mx-auto">
+<div class="h-dvh w-dvw min-h-[36rem] grid grid-rows-[auto_1fr] mx-auto layout">
 	<Navbar />
 	<slot />
 </div>
@@ -64,3 +64,11 @@
 		duration: 1000
 	}}
 />
+
+<style>
+	@media (max-width: 240px) {
+		.layout {
+			min-width: 24rem;
+		}
+	}
+</style>
