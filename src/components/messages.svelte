@@ -118,9 +118,9 @@
 			if ($messages[$messages.length - 1].role !== 'assistant') {
 				$messages = [...$messages, { role: 'assistant', content: '', createdAt: Date.now() }]
 				$loading = false
-				chatMessages.scrollTop = chatMessages.scrollHeight
 			}
 			$messages[$messages.length - 1].content += chunk
+			chatMessages.scrollTop = chatMessages.scrollHeight
 		}
 
 		$isModelStreaming = false
