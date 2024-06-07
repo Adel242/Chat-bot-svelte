@@ -172,6 +172,7 @@
 					{/if}
 					<b class="text-sm text-gray-11 tracking-wide">{$selectedAgent?.name}</b>
 				</div>
+				<Markdown {content} />
 			{/if}
 			{#if role === 'user'}
 				<div class="flex items-center gap-2">
@@ -182,8 +183,10 @@
 					/>
 					<b class="text-sm text-gray-11 tracking-wide">{$user?.full_name}</b>
 				</div>
+				<div>
+					{content}
+				</div>
 			{/if}
-			<Markdown {content} />
 		</section>
 	{/each}
 	<!-- Loader -->

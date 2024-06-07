@@ -1,7 +1,7 @@
 {
 	"manifest_version": 3,
 	"name": "CodeGPT Extension",
-	"version": "0.1.04",
+	"version": "0.1.06",
 	"description": "CodeGPT extension",
 	"action": {
 		"default_title": "CodeGPT Extension",
