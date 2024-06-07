@@ -8,7 +8,7 @@
 	onMount(async () => {
 		const connectionId = crypto.randomUUID()
 
-		const url = `http://localhost:3000/login?source=chrome&connection_id=${connectionId}`
+		const url = `https://app.codegpt.co/login?source=chrome&connection_id=${connectionId}`
 
 		await chrome.tabs.create({ url, active: true })
 
