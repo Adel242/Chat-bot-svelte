@@ -22,16 +22,16 @@
 {#if apiKey}
 	<div class="dropdown">
 		<button
-			class={`btn btn-circle btn-outline bg-transparent p-0`}
+			class="btn btn-circle btn-outline h-auto w-auto bg-transparent p-0"
 			tabindex="0"
 			style="background-color: transparent;"
 		>
-			<div class="flex items-center gap-2 w-8 h-8 rounded-full">
+			<div class="flex items-center gap-2 w-6 h-6 rounded-full">
 				{#if $user?.avatar_url}
 					<img
 						src={$user?.avatar_url}
 						alt="user avatar"
-						class="w-8 h-8 rounded-full object-cover"
+						class="w-6 h-6 rounded-full object-cover"
 					/>
 				{/if}
 			</div>
