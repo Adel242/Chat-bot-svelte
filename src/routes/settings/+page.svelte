@@ -5,6 +5,9 @@
 	import { toast } from 'svelte-sonner'
 	import { getChromeStorage, setChromeStorage } from '$lib/chrome-storage'
 	import { BASE_API_URL } from '@/lib/api'
+	import { supabase } from '@/lib/supabase/client'
+
+	let loading = false
 
 	onMount(async () => {
 		const storage = await getChromeStorage(['apiKey', 'orgId'])
@@ -35,6 +38,26 @@
 		credentials.set({ apiKey, orgId })
 		await setChromeStorage({ apiKey, orgId })
 		goto('/')
+	}
+
+	const handleGoogleSignIn = async () => {
+		loading = true
+		const redirectTo = `${window.location.origin}/index.html`
+
+		const { data } = await supabase.auth.signInWithOAuth({
+			provider: 'google',
+			options: {
+				redirectTo,
+				skipBrowserRedirect: true
+			}
+		})
+
+		if (!data.url) {
+			loading = false
+			return
+		}
+
+		window.location.href = data.url
 	}
 </script>
 
@@ -69,8 +92,14 @@
 							/>
 						</div>
 					</div>
-					<div class="card-footer">
+					<div class="card-footer flex flex-col gap-2 items-start">
 						<button type="submit" class="btn btn-primary btn-sm">Sign In</button>
+						<button
+							type="button"
+							class="btn btn-secondary btn-sm"
+							class:btn-loading={loading}
+							on:click={handleGoogleSignIn}>Sign In Google</button
+						>
 					</div>
 				</div>
 			</form>
