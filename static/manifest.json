@@ -17,6 +17,11 @@
 	"side_panel": {
 		"default_path": "index.html"
 	},
+	"sidebar_action": {
+		"default_icon": "favicon-16.png",
+		"default_title": "CodeGPT Extension",
+		"default_panel": "index.html"
+	},
 	"background": {
 		"service_worker": "background.js"
 	}
