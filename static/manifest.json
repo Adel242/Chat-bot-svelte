@@ -1,10 +1,10 @@
 {
 	"manifest_version": 3,
 	"name": "CodeGPT Extension",
-	"version": "0.1.04",
+	"version": "0.1.061",
 	"description": "CodeGPT extension",
 	"action": {
-		"default_title": "CodeGPT Extension",
+		"default_title": "CodeGPT Chat",
 		"default_popup": "index.html"
 	},
 	"icons": {
@@ -13,7 +13,7 @@
 		"48": "favicon-48.png",
 		"128": "favicon-128.png"
 	},
-	"permissions": ["storage", "sidePanel", "tabs"],
+	"permissions": ["storage", "sidePanel", "tabs", "contextMenus", "scripting", "activeTab"],
 	"side_panel": {
 		"default_path": "index.html"
 	},
@@ -24,5 +24,11 @@
 	},
 	"background": {
 		"service_worker": "background.js"
-	}
+	},
+	"content_scripts": [
+		{
+			"matches": ["<all_urls>"],
+			"js": ["content.js"]
+		}
+	]
 }
