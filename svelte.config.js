@@ -8,7 +8,9 @@ const config = {
 	kit: {
 		adapter: adapter(),
 		appDir: 'app',
-		alias: { '@/*': './src/*' }
+		alias: {
+			'@/*': './src/*'
+		}
 	}
 }
 

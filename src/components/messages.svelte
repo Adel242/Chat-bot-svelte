@@ -12,6 +12,7 @@
 	import { messages } from '../stores/messages-store'
 	import { isModelStreaming } from '../stores/is-model-streaming-store'
 	import Sparkles from './icons/sparkles.svelte'
+	import { Textarea } from '@/lib/components/ui/textarea'
 
 	let chatMessages: HTMLDivElement
 	let renderingMessage = false
@@ -191,7 +192,9 @@
 	{/each}
 	<!-- Loader -->
 	<section
-		class={` ${$loading ? 'opacity-100' : 'opacity-0'} grid cursor-none select-none gap-4 mb-6 px-2 h-20`}
+		class={` ${
+			$loading ? 'opacity-100' : 'opacity-0'
+		} grid cursor-none select-none gap-4 mb-6 px-2 h-20`}
 	>
 		<button class="btn btn-loading btn-outline border w-fit text-gray-11">Thinking</button>
 	</section>
@@ -199,6 +202,7 @@
 
 <footer>
 	<form on:submit|preventDefault={handleSubmit} class="w-full flex gap-2 p-2">
+		<Textarea />
 		<textarea
 			name="input"
 			class="min-h-10 max-h-40 textarea textarea-solid resize-none text-sm textarea-block"
