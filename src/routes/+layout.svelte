@@ -1,13 +1,16 @@
-<script>
+<script lang="ts">
 	import '../app.css'
 	import { onMount } from 'svelte'
 	import { credentials } from '../stores/credentials-store'
 	import { Toaster, toast } from 'svelte-sonner'
 	import Navbar from '../components/navbar.svelte'
-	import { getChromeStorage } from '$lib/chrome-storage'
+	import { getChromeStorage, removeChromeStorage, setChromeStorage } from '$lib/chrome-storage'
 	import { fetchUserData } from '../services/users'
 	import { user } from '../stores/users-store'
 	import { goto } from '$app/navigation'
+	import type { AuthSession } from '@supabase/supabase-js'
+	import { supabase } from '@/lib/supabase/client'
+	import { page } from '$app/stores'
 
 	credentials.subscribe(async ({ apiKey }) => {
 		if (!apiKey) {
@@ -25,14 +28,17 @@
 
 	onMount(async () => {
 		const storage = await getChromeStorage(['apiKey', 'orgId'])
-		if (!storage) return
+		if (!storage) {
+			goto('/settings')
+			return
+		}
 
 		const apiKey = storage['apiKey'] ?? ''
 		const orgId = storage['orgId'] ?? ''
 
 		credentials.set({ apiKey, orgId })
 
-		if (apiKey || orgId) {
+		if (apiKey) {
 			goto('/')
 		} else {
 			goto('/settings')
@@ -43,9 +49,26 @@
 		if (!userData) {
 			toast.error('Invalid API key')
 			user.set(null)
+			credentials.set({ apiKey: '', orgId: '' })
+			await removeChromeStorage(['apiKey', 'orgId'])
+			goto('/settings')
 			return
 		}
 		user.set(userData)
+	})
+
+	let session: AuthSession | null
+
+	onMount(() => {
+		supabase.auth.onAuthStateChange(async (_event, _session) => {
+			const pathname = $page.url.pathname
+			session = _session
+			if (session) {
+				await setChromeStorage({ apiKey: session.access_token, orgId: '' })
+				credentials.set({ apiKey: session.access_token, orgId: '' })
+				if (pathname !== '/') goto('/')
+			}
+		})
 	})
 </script>
 

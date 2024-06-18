@@ -1,52 +1,42 @@
 <script lang="ts">
-	import { goto } from '$app/navigation'
-	import { onMount } from 'svelte'
-	import { credentials } from '../../stores/credentials-store'
-	import { toast } from 'svelte-sonner'
-	import { getChromeStorage, setChromeStorage } from '$lib/chrome-storage'
 	import { BASE_API_URL } from '@/lib/api'
+	import { onMount } from 'svelte'
+	import { credentials } from '@/stores/credentials-store'
+	import { setChromeStorage } from '$lib/chrome-storage'
+	import { goto } from '$app/navigation'
 
 	onMount(async () => {
-		const storage = await getChromeStorage(['apiKey', 'orgId'])
-		if (storage) {
-			let apiKey = storage['apiKey'] ?? ''
-			let orgId = storage['orgId'] ?? ''
-			credentials.set({ apiKey, orgId })
+		const connectionId = crypto.randomUUID()
+
+		const url = `https://app.codegpt.co/login?source=chrome&connection_id=${connectionId}`
+
+		await chrome.tabs.create({ url, active: true })
+
+		const es = new EventSource(`${BASE_API_URL}/extensions/connection/${connectionId}`)
+
+		es.onmessage = async (e) => {
+			const data = JSON.parse(e.data)
+			credentials.set({ apiKey: data.access_token, orgId: '' })
+			await setChromeStorage({ apiKey: data.access_token, orgId: '' })
+			goto('/')
+			es.close()
 		}
 	})
-
-	const handleSubmit = async (e: SubmitEvent) => {
-		const form = e.currentTarget as HTMLFormElement
-		const formData = new FormData(form)
-		const apiKey = String(formData.get('apiKey')) ?? ''
-		const orgId = String(formData.get('orgId')) ?? ''
-
-		if (!apiKey) {
-			toast.warning('Please enter an api key')
-			return
-		}
-
-		const res = await fetch(`${BASE_API_URL}/apikeys/${apiKey}`)
-		if (!res.ok) {
-			toast.error('invalid Api Key')
-			return
-		}
-
-		credentials.set({ apiKey, orgId })
-		await setChromeStorage({ apiKey, orgId })
-		goto('/')
-	}
 </script>
 
 <main class="flex flex-col h-full items-center justify-center">
 	<div class="w-full sm:max-w-md m-auto grid gap-2 justify-center">
 		<section class="grid gap-2">
-			<h1 class="font-bold">Sign In</h1>
+			<h1 class="font-bold">CodeGPT Connect</h1>
 			<div class="card">
 				<div class="grid card-body justify-center">
-					<p>Sign in to your CodeGPT account</p>
+					<p class="">
+						Please press the button "connect account" in your browser to connect to CodeGPT
+					</p>
 					<div class="card-footer flex flex-col gap-2 items-start">
-						<a class="btn btn-primary btn-sm" href="/auth">Sign In</a>
+						<button class="btn btn-loading btn-outline border w-fit text-gray-11"
+							>Connecting to CodeGPT</button
+						>
 					</div>
 				</div>
 			</div>
