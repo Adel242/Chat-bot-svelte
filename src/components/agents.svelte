@@ -103,7 +103,14 @@
 	})
 </script>
 
-<select class="select" value={agentId} disabled={$loading} on:change={handleAgentChange}>
+<select
+	placeholder="My AI Agents"
+	class="select"
+	value={agentId}
+	disabled={$loading}
+	on:change={handleAgentChange}
+>
+	<option disabled>My AI Agents</option>
 	{#each agents as { id, name } (id)}
 		<option value={id}>{name}</option>
 	{/each}

@@ -30,9 +30,7 @@
 			<h1 class="font-bold">CodeGPT Connect</h1>
 			<div class="card">
 				<div class="grid card-body justify-center">
-					<p class="">
-						Please press the button "connect account" in your browser to connect to CodeGPT
-					</p>
+					<p>Please press the button "connect account" in your browser to connect to CodeGPT</p>
 					<div class="card-footer flex flex-col gap-2 items-start">
 						<button class="btn btn-loading btn-outline border w-fit text-gray-11"
 							>Connecting to CodeGPT</button
