@@ -189,9 +189,11 @@
 			{/if}
 		</section>
 	{/each}
+	
 	<!-- Loader -->
+	
 	<section
-		class={` ${$loading ? 'opacity-100' : 'opacity-0'} grid cursor-none select-none gap-4 mb-6 px-2 h-20`}
+		class={`${$loading ? 'block' : 'hidden'} grid select-none gap-4 mb-6 px-2 h-20`}
 	>
 		<button class="btn btn-loading btn-outline border w-fit text-gray-11">Thinking</button>
 	</section>

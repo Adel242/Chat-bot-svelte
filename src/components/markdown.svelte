@@ -27,7 +27,6 @@
 							<span class='uppercase text-xs'>${language}</span>
 						</div>
 
-
 					</header>
 					<div class='code p-2'>` +
 					hljs.highlight(code, { language }).value +
