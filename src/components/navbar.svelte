@@ -17,9 +17,9 @@
 	] as const
 </script>
 
-<header class="flex gap-0 items-center justify-between p-3 pb-0 border-b-neutral/30">
+<header class="h-14 flex items-center justify-between p-2 border-b border-b-border">
 	<LogotypeWide currentColor="currentColor" class="h-3" />
-	<nav class="flex items-center gap-4">
+	<nav>
 		<Menu apiKey={$credentials.apiKey} />
 	</nav>
 </header>

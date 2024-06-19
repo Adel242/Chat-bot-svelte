@@ -1,3 +1,10 @@
-import { writable } from 'svelte/store';
+import type { Agent } from '@/types'
+import { writable } from 'svelte/store'
 
-export const selectedAgent = writable<string | null>(null);
+interface SelectedAgent {
+	id: Agent['id']
+	image: Agent['image']
+	name: Agent['name']
+}
+
+export const selectedAgent = writable<SelectedAgent | null>(null)

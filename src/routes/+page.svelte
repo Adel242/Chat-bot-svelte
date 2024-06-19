@@ -9,8 +9,8 @@
 	}
 </script>
 
-<main class="grid grid-rows-[auto_1fr_auto] grid-cols-1 h-full p-2">
-	<div id="chat-header" class="w-full flex gap-2 justify-between items-center">
+<main class="grid grid-rows-[auto_1fr_auto] grid-cols-1 h-full hide-scrollbar">
+	<div id="chat-header" class="w-full flex gap-2 justify-between items-center p-2">
 		<Agents />
 		<CleanChat on:click={handleClearMessages} />
 	</div>

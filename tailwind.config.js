@@ -4,7 +4,9 @@ export default {
 	plugins: [require('rippleui')],
 	theme: {
 		colors: {
-			blue: '#1fb6ff'
+			blue: '#1fb6ff',
+			white: '#ffffff',
+			black: '#000000'
 		}
 	}
 }
