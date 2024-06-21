@@ -29,18 +29,16 @@
 		<section class="grid gap-2">
 			<h1 class="font-bold">CodeGPT Connect</h1>
 			<div class="card">
-				<div class="grid card-body justify-center">
+				<div class="grid card-body justify-center text-center">
 					<p>Please press the button "connect account" in your browser to connect to CodeGPT</p>
-					<div class="card-footer flex flex-col gap-2 items-start">
-						<button class="btn btn-loading btn-outline border w-fit text-gray-11"
-							>Connecting to CodeGPT</button
-						>
-					</div>
+					<button class="btn btn-loading btn-outline border w-fit text-gray-11 mx-auto"
+						>Connecting to CodeGPT</button
+					>
 				</div>
 			</div>
 		</section>
 		<section>
-			<p class="flex text-xs text-gray-12 gap-2 items-center justify-between px-2">
+			<p class="flex text-xs text-gray-11 gap-2 items-center justify-between px-2">
 				<a href="https://intercom.help/codegpt/en/" target="_blank" class="flex items-center gap-1">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"

@@ -14,7 +14,7 @@
 		credentials.set({ apiKey: '', orgId: '' })
 		await removeChromeStorage(['apiKey', 'orgId'])
 		await chrome.storage.local.clear()
-		toast.success('Signed out successfully')
+		// toast.success('Signed out successfully')
 		goto('/settings')
 	}
 </script>

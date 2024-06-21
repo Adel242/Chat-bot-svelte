@@ -13,7 +13,7 @@
 		"48": "favicon-48.png",
 		"128": "favicon-128.png"
 	},
-	"permissions": ["storage", "sidePanel", "tabs", "contextMenus", "scripting", "activeTab"],
+	"permissions": ["storage", "sidePanel"],
 	"side_panel": {
 		"default_path": "index.html"
 	},
@@ -24,11 +24,5 @@
 	},
 	"background": {
 		"service_worker": "background.js"
-	},
-	"content_scripts": [
-		{
-			"matches": ["<all_urls>"],
-			"js": ["content.js"]
-		}
-	]
+	}
 }

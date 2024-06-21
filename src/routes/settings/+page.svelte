@@ -28,7 +28,7 @@
 
 		const res = await fetch(`${BASE_API_URL}/apikeys/${apiKey}`)
 		if (!res.ok) {
-			toast.error('invalid Api Key')
+			// toast.error('invalid Api Key')
 			return
 		}
 
@@ -39,20 +39,21 @@
 </script>
 
 <main class="flex flex-col h-full items-center justify-center">
-	<div class="w-full sm:max-w-md m-auto grid gap-2 justify-center">
-		<section class="grid gap-2">
+	<div class="w-full sm:max-w-64 m-auto flex flex-col gap-2 justify-center">
+		<section class="w-full flex flex-col gap-2">
 			<h1 class="font-bold">Sign In</h1>
-			<div class="card">
-				<div class="grid card-body justify-center">
-					<p>Sign in to your CodeGPT account</p>
-					<div class="card-footer flex flex-col gap-2 items-start">
-						<a class="btn btn-primary btn-sm" href="/auth">Sign In</a>
-					</div>
-				</div>
-			</div>
+			<a class="btn btn-primary w-full" href="/auth">Connect with CodeGPT</a>
 		</section>
-		<section>
-			<p class="flex text-xs text-gray-12 gap-2 items-center justify-between px-2">
+
+		<section class="w-full flex flex-col gap-2 text-center">
+			<div class="divider divider-horizontal">OR</div>
+			<p>
+				New? <a class="text-primary" href="https://app.codegpt.co/"><u>Create an Account</u></a>
+			</p>
+		</section>
+
+		<section class="absolute bottom-0 left-0 right-0 flex p-3">
+			<p class="flex text-xs text-gray-11 gap-2 items-center justify-between m-auto">
 				<a href="https://intercom.help/codegpt/en/" target="_blank" class="flex items-center gap-1">
 					<svg
 						xmlns="http://www.w3.org/2000/svg"

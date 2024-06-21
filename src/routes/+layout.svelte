@@ -47,7 +47,7 @@
 		if (!apiKey) return
 		const userData = await fetchUserData(apiKey)
 		if (!userData) {
-			toast.error('Invalid API key')
+			// toast.error('Invalid API key')
 			user.set(null)
 			credentials.set({ apiKey: '', orgId: '' })
 			await removeChromeStorage(['apiKey', 'orgId'])
