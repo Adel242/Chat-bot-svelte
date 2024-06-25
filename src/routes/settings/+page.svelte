@@ -14,28 +14,6 @@
 			credentials.set({ apiKey, orgId })
 		}
 	})
-
-	const handleSubmit = async (e: SubmitEvent) => {
-		const form = e.currentTarget as HTMLFormElement
-		const formData = new FormData(form)
-		const apiKey = String(formData.get('apiKey')) ?? ''
-		const orgId = String(formData.get('orgId')) ?? ''
-
-		if (!apiKey) {
-			toast.warning('Please enter an api key')
-			return
-		}
-
-		const res = await fetch(`${BASE_API_URL}/apikeys/${apiKey}`)
-		if (!res.ok) {
-			// toast.error('invalid Api Key')
-			return
-		}
-
-		credentials.set({ apiKey, orgId })
-		await setChromeStorage({ apiKey, orgId })
-		goto('/')
-	}
 </script>
 
 <main class="flex flex-col h-full items-center justify-center">

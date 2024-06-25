@@ -38,19 +38,16 @@
 
 		credentials.set({ apiKey, orgId })
 
-		if (apiKey) {
-			goto('/')
-		} else {
+		if (!apiKey) {
+			user.set(null)
+			await removeChromeStorage(['apiKey', 'orgId'])
 			goto('/settings')
+			return
 		}
 
-		if (!apiKey) return
 		const userData = await fetchUserData(apiKey)
 		if (!userData) {
-			// toast.error('Invalid API key')
-			user.set(null)
 			credentials.set({ apiKey: '', orgId: '' })
-			await removeChromeStorage(['apiKey', 'orgId'])
 			goto('/settings')
 			return
 		}
@@ -66,7 +63,7 @@
 			if (session) {
 				await setChromeStorage({ apiKey: session.access_token, orgId: '' })
 				credentials.set({ apiKey: session.access_token, orgId: '' })
-				if (pathname !== '/') goto('/')
+				if (pathname !== '/index.html') goto('/')
 			}
 		})
 	})

@@ -4,13 +4,24 @@
 	import { credentials } from '@/stores/credentials-store'
 	import { setChromeStorage } from '$lib/chrome-storage'
 	import { goto } from '$app/navigation'
+	import { browser } from '$app/environment'
 
 	onMount(async () => {
+		const isEdge = navigator.userAgent.indexOf('Edg/') !== -1
+
 		const connectionId = crypto.randomUUID()
 
 		const url = `https://app.codegpt.co/login?source=chrome&connection_id=${connectionId}`
 
-		await chrome.tabs.create({ url, active: true })
+		let windowId
+
+		if (isEdge) {
+			await chrome.windows.create({ url, type: 'popup' }, ({ id }) => {
+				windowId = id
+			})
+		} else {
+			await chrome.tabs.create({ url, active: true })
+		}
 
 		const es = new EventSource(`${BASE_API_URL}/extensions/connection/${connectionId}`)
 
@@ -18,6 +29,10 @@
 			const data = JSON.parse(e.data)
 			credentials.set({ apiKey: data.access_token, orgId: '' })
 			await setChromeStorage({ apiKey: data.access_token, orgId: '' })
+
+			if (isEdge && windowId) {
+				await chrome.windows.remove(windowId)
+			}
 			goto('/')
 			es.close()
 		}
